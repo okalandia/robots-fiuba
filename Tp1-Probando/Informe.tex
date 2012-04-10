@@ -38,8 +38,11 @@
 % Para generar pdf.
 \usepackage[pdftex]{graphicx}
 \pdfcompresslevel=9
-
+\usepackage{appendix}
 \usepackage{pdfpages}
+
+\usepackage{url}
+
 
 %
 % Directorio donde están las imagenes.
@@ -87,7 +90,7 @@
 \includegraphics[scale=0.55]{./Images/fiuba}\\
 \large{\textsc{Universidad de Buenos Aires}}\\
 \large{\textsc{Facultad De Ingeniería}}\\
-\small{Año 2012 - 1\textsuperscript{er} Cuatrimestre}
+\small{Año 2012 - 2\textsuperscript{do} Cuatrimestre}
 \end{center}
 
 \vfill
@@ -128,18 +131,34 @@ Rivero, Hern\'an & XXXXXX & riverohernanj@gmail.com \\
 \vspace{0.2cm}
 
 % Pie de página de la carátula.
-\noindent\small{75.70 - Sistema de Programaci\'on No Convencional de Robots \hfill}
+%\noindent\small{75.70 - Sistema de Programaci\'on No Convencional de Robots \hfill}
 
 \end{titlepage}
 
 % ------------------------------- ~Carátula -------------------------------
 
+% ----------------------- Cabeceras y pies de página ----------------------
+
+\pagestyle{fancy}
+\lhead{}
+\chead{}
+\rhead{}
+\lfoot{\scriptsize{75.70 - Sistema de Programaci\'on No Convencional de Robots \\
+\\Trabajo práctico 0 - 2do cuatrimestre 2012}}
+\cfoot{}
+\rfoot{\\\thepage}
+\renewcommand{\headrulewidth}{0pt}
+
+% ---------------------- ~Cabeceras y pies de página ----------------------
+
 % -------------------------------- Índice ---------------------------------
 
 % Hago que las páginas se comiencen a contar a partir de aquí.
-\setcounter{page}{1}
+\setcounter{page}{2}
 
 % Índice.
+\newpage
+\thispagestyle{empty}
 \tableofcontents
 \newpage
 
@@ -147,14 +166,11 @@ Rivero, Hern\'an & XXXXXX & riverohernanj@gmail.com \\
 
 % ----------------------------- Inicio del tp -----------------------------
 
-
-% Introducción.
 \section{Objetivo}
 El objetivo del presente trabajo pr\'actico es familiarizarnos con la herramienta Joone, utilizada para el estudio de Redes Neuronales. Y finalmente, poder realizar una an\'alisis de los resultados obtenidos.
 
 \section{Descripci\'on base de datos seleccionada}
-Se seleccion\'o la base de datos del Ta-Te-Ti, extra\'ida de la p\'agina UCI (Machine Learning Repository)
-Esta base de datos codifica el conjunto completo de configuraciones posibles para el final del juegos del TA-TE-TI, donde "x" se supone que juega primero. El concepto objetivo es "ganar para x" (es decir, ocurre cuando "x" tiene una de las 8 posibles maneras de crear un "tres-en-l\'inea").
+Se seleccion\'o la base de datos del TA-TE-TI, extra\'ida de la p\'agina UCI (Machine Learning Repository) \cite{UCI}. Esta base de datos codifica el conjunto completo de configuraciones posibles para el final del juegos del TA-TE-TI, donde "x" se supone que juega primero. El concepto objetivo es "ganar para x" (es decir, ocurre cuando "x" tiene una de las 8 posibles maneras de crear un "tres-en-l\'inea").
 
 \subsection{Informaci\'on relevante}
 
@@ -192,15 +208,76 @@ debido a que s\'olo trabaja con n\'umeros reales y enteros. \\
 
 \section{Red Neuronal}
 
+\begin{center}
+ \includegraphics[width=500,height=250]{./Images/RN.png}
+ % RN.png: 826x350 pixel, 96dpi, 21.85x9.26 cm, bb=0 0 619 262
+\end{center}
 
-\section{Ejecutando}
+\section{Ejecutando la Red Neuronal}
+\begin{center}
+ \includegraphics{./Images/configuracion-corridas.png}
+ % configuracion-corridas.png: 333x368 pixel, 96dpi, 8.81x9.74 cm, bb=0 0 250 276
+\end{center}
 
+\begin{center}
+ \includegraphics{./Images/fin-corridas.png}
+ % fin-corridas.png: 332x366 pixel, 96dpi, 8.78x9.68 cm, bb=0 0 249 274
+\end{center}
 
+\section{Resultados}
+Luego del aprendizaje que se le aplic\'o a la Red Neuronal, se agreg\'o un archivo de salida para probar la red entrenada (``Resultados.txt''). Para ello, se configur\'o: 
+\begin{itemize}
+ \item learning = FALSE
+ \item epochs = 1
+\end{itemize}
+En el archivo se pudo observar que los valores coinciden apr\'oximadamente con la columna diez de la base de datos original. 
 
 \section{Conclusiones}
-Cuanto lleva armarlo y cuando lleva correrlo
+Cuanto lleva armarlo y cuando lleva correrlo. \\
 
 
+% -------------------------------- Apendice --------------------------------
+\appendix
+\newpage
+\section{Tabla comparativa de los resultados}
+A continuaci\'on se presentan los resultados originales de la base de datos contra los obtenidos de la red neuronal entrenada.
+
+% ------------------------------- ~Apendice -------------------------------
+
+% ----------------------------- Bibliografia ------------------------------
+\newpage
+\begin{thebibliography}{99}
+	\bibitem{docjoone}
+		\textbf{Documentaci\'on Joone} \\
+		\url{http://sourceforge.net/projects/joone/files/Documentation/DTE/JooneDTEGuide.pdf}
+
+	\bibitem{tutorialjoone}
+		\textbf{Tutorial B\'asico Joone} \\
+		\url{http://ubuntuone.com/p/1dB/}
+
+	\bibitem{UCI}
+		\textbf{UCI Machine Learning Repository - Tic-Tac-Toe Endgame Data Set} \\
+		\url{http://archive.ics.uci.edu/ml/datasets/Tic-Tac-Toe+Endgame}
+
+	\bibitem{tic-tac-toe1}
+		\textbf{Training an artificial neuronal network to play tic-tac-toe} \\
+		\url{http://users.auth.gr/kehagiat/GameTheory/12CombBiblio/TicTacToe.pdf}
+
+	\bibitem{tic-tac-toe2}
+		\textbf{How to code an artificial neural network (Tic-tac-toe)?} \\
+		{\url{http://stackoverflow.com/questions/761216/how-to-code-an-artificial-neural-network-tic-tac-toe}}
+
+	\bibitem{tic-tac-toe3}
+		\textbf{Neural Net Training for Tic-Tac-Toe} \\
+		\url{www.cs.virginia.edu/~bmb5v/cs660/Project.doc}
+
+	\bibitem{tic-tac-toe4}
+		\textbf{TD Learning of Game Evaluation Functions with Hierarchical Neural Architectures} \\
+		\url{http://webber.physik.uni-freiburg.de/~hon/vorlss02/Literatur/reinforcement/GameEvaluationWithNeuronal.pdf}
+
+\end{thebibliography}
+
+% ---------------------------- ~Bibliografia ------------------------------
 
 % ------------------------------ Fin del tp -------------------------------
 
