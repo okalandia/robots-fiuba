@@ -208,6 +208,8 @@ debido a que s\'olo trabaja con n\'umeros reales y enteros. \\
     \end{enumerate}
 
 \section{Red Neuronal}
+Para el armado de la red neural, se tuvo en cuenta que la cantidad de casilleros del tablero de Ta-Te-Ti es 9 y que por cada uno se tiene la posibilidad de encontrar tres tipos de elementos (cruz, c\'irculo y vac\'io). Entonces, como primera capa oculta se decidi\'o utilizar 27 (9x3) filas. Para las siguientes capas ocultas se decidieron utilizar 9 y 3 filas, en funci\'on de la cantidad de casilleros y elementos posibles. \\
+
 Para entrenar la red se requirieron datos que representen el comportamiento deseado. \\
 En la base de datos original encontramos diez columnas, las nueve primeras representan los lugares del tablero del Ta-Te-Ti y la \'ultima columna representa si gana el jugador ``x''.
 
@@ -224,7 +226,7 @@ Se configur\'o el entrenamiento de la red con los datos que se observan en la fi
  % configuracion-corridas.png: 333x368 pixel, 96dpi, 8.81x9.74 cm, bb=0 0 250 276
 \end{center}
 
-Luego del entrenamiento, se obtuvo la siguiente salida.
+Luego del entrenamiento, se obtuvo la siguiente salida; en la cual se puede observar que el error es peque\~no.
 \begin{center}
  \includegraphics{./Images/fin-corridas.png}
  % fin-corridas.png: 332x366 pixel, 96dpi, 8.78x9.68 cm, bb=0 0 249 274
@@ -239,8 +241,7 @@ Luego del aprendizaje que se le aplic\'o a la Red Neuronal, se agreg\'o un archi
 En el archivo se pudo observar que los valores coinciden apr\'oximadamente con la columna diez de la base de datos original. Se puede observar los resultados en el APENDICE A.
 
 \section{Conclusiones}
-Cuanto lleva armarlo y cuando lleva correrlo. \\
-
+En el presente trabajo práctico, nos enfocamos en aprender a utilizar la herramienta Joone y en tener un primer acercamiento a la creaci\'on y entrenamiento de redes neuronales. Como conclusi\'on final podemos decir que el armado de una red neuronal lleva un tiempo considerablemente mayor al del entrenamiento de la misma. Esto se debe a que el entrenamiento es un proceso automatizado, que no requiere m\'as que la configuraci\'on de algunos par\'ametros. Mientras que para el armado de una red neuronal, que nos permita resolver el problema, es necesario un conocimiento sobre la situaci\'on que estamos enfrentando, de manera de poder crear una red que nos permita resolver el problema de manera eficiente. Por otro lado, observamos que el entrenamiento prolongado de una red mal armada no significaba llegar a los resultados deseados. Es decir, que lo m\'as importante es concentrarnos en crear una red acorde al problema; de manera de asegurarnos llegar a los resultados buscados; lo cual puede estar acompa\~nado de un tiempo de entrenamiento m\'as corto de lo esperado. \\
 
 % -------------------------------- Apendice --------------------------------
 \appendix
@@ -273,7 +274,8 @@ A continuaci\'on se presentan los resultados originales de la base de datos cont
 
 	\bibitem{tic-tac-toe2}
 		\textbf{How to code an artificial neural network (Tic-tac-toe)?} \\
-		{\url{http://stackoverflow.com/questions/761216/how-to-code-an-artificial-neural-network-tic-tac-toe}}
+		\url{http://stackoverflow.com/questions/761216/} \\
+		\url{how-to-code-an-artificial-neural-network-tic-tac-toe}
 
 	\bibitem{tic-tac-toe3}
 		\textbf{Neural Net Training for Tic-Tac-Toe} \\
