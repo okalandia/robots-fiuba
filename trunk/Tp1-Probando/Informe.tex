@@ -38,9 +38,10 @@
 % Para generar pdf.
 \usepackage[pdftex]{graphicx}
 \pdfcompresslevel=9
+
 \usepackage{appendix}
 \usepackage{pdfpages}
-
+\usepackage{longtable}
 \usepackage{url}
 
 
@@ -90,7 +91,7 @@
 \includegraphics[scale=0.55]{./Images/fiuba}\\
 \large{\textsc{Universidad de Buenos Aires}}\\
 \large{\textsc{Facultad De Ingeniería}}\\
-\small{Año 2012 - 2\textsuperscript{do} Cuatrimestre}
+\small{Año 2012 - 1\textsuperscript{er} Cuatrimestre}
 \end{center}
 
 \vfill
@@ -144,7 +145,7 @@ Rivero, Hern\'an & XXXXXX & riverohernanj@gmail.com \\
 \chead{}
 \rhead{}
 \lfoot{\scriptsize{75.70 - Sistema de Programaci\'on No Convencional de Robots \\
-\\Trabajo práctico 0 - 2do cuatrimestre 2012}}
+\\Trabajo práctico 0 - 1er cuatrimestre 2012}}
 \cfoot{}
 \rfoot{\\\thepage}
 \renewcommand{\headrulewidth}{0pt}
@@ -207,30 +208,35 @@ debido a que s\'olo trabaja con n\'umeros reales y enteros. \\
     \end{enumerate}
 
 \section{Red Neuronal}
+Para entrenar la red se requirieron datos que representen el comportamiento deseado. \\
+En la base de datos original encontramos diez columnas, las nueve primeras representan los lugares del tablero del Ta-Te-Ti y la \'ultima columna representa si gana el jugador ``x''.
 
 \begin{center}
  \includegraphics[width=500,height=250]{./Images/RN.png}
  % RN.png: 826x350 pixel, 96dpi, 21.85x9.26 cm, bb=0 0 619 262
 \end{center}
 
-\section{Ejecutando la Red Neuronal}
+\section{Entrenando la Red Neuronal}
+Se configur\'o el entrenamiento de la red con los datos que se observan en la figura siguiente.
+
 \begin{center}
  \includegraphics{./Images/configuracion-corridas.png}
  % configuracion-corridas.png: 333x368 pixel, 96dpi, 8.81x9.74 cm, bb=0 0 250 276
 \end{center}
 
+Luego del entrenamiento, se obtuvo la siguiente salida.
 \begin{center}
  \includegraphics{./Images/fin-corridas.png}
  % fin-corridas.png: 332x366 pixel, 96dpi, 8.78x9.68 cm, bb=0 0 249 274
 \end{center}
 
 \section{Resultados}
-Luego del aprendizaje que se le aplic\'o a la Red Neuronal, se agreg\'o un archivo de salida para probar la red entrenada (``Resultados.txt''). Para ello, se configur\'o: 
+Luego del aprendizaje que se le aplic\'o a la Red Neuronal, se agreg\'o un archivo de salida para probar la red entrenada. Para ello, se configur\'o: 
 \begin{itemize}
  \item learning = FALSE
  \item epochs = 1
 \end{itemize}
-En el archivo se pudo observar que los valores coinciden apr\'oximadamente con la columna diez de la base de datos original. 
+En el archivo se pudo observar que los valores coinciden apr\'oximadamente con la columna diez de la base de datos original. Se puede observar los resultados en el APENDICE A.
 
 \section{Conclusiones}
 Cuanto lleva armarlo y cuando lleva correrlo. \\
@@ -241,6 +247,8 @@ Cuanto lleva armarlo y cuando lleva correrlo. \\
 \newpage
 \section{Tabla comparativa de los resultados}
 A continuaci\'on se presentan los resultados originales de la base de datos contra los obtenidos de la red neuronal entrenada.
+\input{./ApendiceA-Tabla.tex}
+
 
 % ------------------------------- ~Apendice -------------------------------
 
