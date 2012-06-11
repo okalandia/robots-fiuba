@@ -1,11 +1,14 @@
-package modelo.jugadores.estrategias.red_neuronal;
+package modelo.red_neuronal;
 
-import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Scanner;
 
 import modelo.logger.LoggerTaTeTi;
@@ -19,11 +22,10 @@ import org.joone.engine.NeuralNetEvent;
 import org.joone.engine.NeuralNetListener;
 import org.joone.engine.SigmoidLayer;
 import org.joone.engine.learning.TeachingSynapse;
-import org.joone.helpers.factory.JooneTools;
 import org.joone.io.FileInputSynapse;
-import org.joone.io.FileOutputSynapse;
+import org.joone.io.MemoryInputSynapse;
+import org.joone.io.MemoryOutputSynapse;
 import org.joone.net.NeuralNet;
-import org.joone.net.NeuralNetLoader;
 
 public class RedNeuronalTaTeTi implements Serializable, NeuralNetListener {
 
@@ -31,21 +33,21 @@ public class RedNeuronalTaTeTi implements Serializable, NeuralNetListener {
 
   private static double	LEARNING_RATE= 0.7;
   private static double	MOMENTUM= 0.6;
-  private static int	CICLES_TRAINIG= 10;
+  private static int	CICLES_TRAINIG= 100000;
   private static int	CICLES_NOT_TRAINING= 1;
   private static int TRAINING_PATTERNS= 1;
-  private static String PATH_RESULTS="data/ResultadoTaTeTi.txt";
 
-	private static Logger logger;
+  private static Logger logger;
   private NeuralNet nnet;
   private Layer input;
   private Layer output;
+  private TeachingSynapse trainer;
 	
 	public RedNeuronalTaTeTi() {
 		logger= LoggerTaTeTi.getInstancia().getLogger(this);
 	}
 	
-	public void inicialRedNeuronal(String pathInputFile) {
+	public void iniciarRedNeuronal() {
     //Layers
 		input= new LinearLayer();
     SigmoidLayer hidden1= new SigmoidLayer();
@@ -84,13 +86,8 @@ public class RedNeuronalTaTeTi implements Serializable, NeuralNetListener {
     //Conexion entre el hidden layer 2 con el hidden layer 3
     hidden2.addOutputSynapse(synapse_Int2);
     hidden3.addInputSynapse(synapse_Int2); 
-    //Archivo que contiene las salidas deseadas
-    FileInputSynapse samples= new FileInputSynapse();
-    samples.setInputFile(new File(pathInputFile));
-    samples.setAdvancedColumnSelector("10-18");
     //Entrenador
-    TeachingSynapse trainer= new TeachingSynapse();
-    trainer.setDesired(samples);   
+    trainer= new TeachingSynapse();
     output.addOutputSynapse(trainer);
     //Agregamos esta estrucutra a un objeto Red Neuronal
     //La Red Neuronal
@@ -105,13 +102,17 @@ public class RedNeuronalTaTeTi implements Serializable, NeuralNetListener {
 	}
 
 	public void entrenar(String pathInputFile) {
-		//Archivo-Entrenamiento-NN
 		File inputFile= new File(pathInputFile);
-    FileInputSynapse inputStream= new FileInputSynapse();
-    //Archivo que contiene el input data
-		inputStream.setInputFile(inputFile);
+    //Archivo Entrada
+		FileInputSynapse inputStream= new FileInputSynapse();
+    inputStream.setInputFile(inputFile);
 		inputStream.setAdvancedColumnSelector("1-9");
-    input.addInputSynapse(inputStream);
+		input.addInputSynapse(inputStream);
+    //Salida Deseada
+    FileInputSynapse outputDesired= new FileInputSynapse();
+    outputDesired.setInputFile(inputFile);
+    outputDesired.setAdvancedColumnSelector("10-18");
+    trainer.setDesired(outputDesired);
 		//Monitor
     Monitor monitor= nnet.getMonitor();
     monitor.setLearningRate(LEARNING_RATE);
@@ -130,53 +131,75 @@ public class RedNeuronalTaTeTi implements Serializable, NeuralNetListener {
 	
 	public boolean salvarRedNeuronal(String filename) {
 		boolean save= true;
-		File file= new File(filename);
-		if(file.exists())
-			file.delete();
+		FileOutputStream stream;
 		try {
-			JooneTools.save(nnet, filename);
+			stream = new FileOutputStream(filename);
+			try {
+				ObjectOutputStream out= new ObjectOutputStream(stream);
+				out.writeObject(nnet);
+				out.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+				save= false;
+			}
 		} catch (FileNotFoundException e) {
-			logger.error("Error al salvar la RN, FileNotFoundException");
-			save= false;
-		} catch (IOException e) {
-			logger.error("Error al salvar la RN, IOException");
+			e.printStackTrace();
 			save= false;
 		}
 		return save;
 	}
 	
 	public boolean restaurarRedNeuronal(String filename) {  
-		NeuralNetLoader loader= new NeuralNetLoader(filename);
-		nnet= loader.getNeuralNet();
-		if(nnet != null) {
-			input= nnet.getInputLayer();
-			output= nnet.getOutputLayer();
-			return true;
+		FileInputStream stream;
+		boolean restore= true;		
+		try {
+			stream = new FileInputStream(filename);
+			try {
+				ObjectInputStream in= new ObjectInputStream(stream);
+				try {
+					nnet= (NeuralNet) in.readObject();
+					input= nnet.getInputLayer();
+					output= nnet.findOutputLayer();
+				} catch (ClassNotFoundException e) {
+					e.printStackTrace();
+					restore= false;
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+				restore= false;
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			restore= false;
 		}
-		return false;
+		return restore;
 	}
 	
-	public void preguntar(String pathTrainingFile) {
-		//Datos de entrada provenientes del tablero del ta-te-ti
-		File trainingFile= new File(pathTrainingFile);
-		FileInputSynapse inputStream= new FileInputSynapse();
-		inputStream.setInputFile(trainingFile);
-		inputStream.setAdvancedColumnSelector("1-9");
-		input.addInputSynapse(inputStream);
-    //Archivo salida con resultados
-    FileOutputSynapse foutput=new FileOutputSynapse();
-    foutput.setFileName(PATH_RESULTS);   
-    output.addOutputSynapse(foutput);
+	public BigDecimal[] preguntar(double[][] inputArray) {
+		MemoryInputSynapse inputSynapse= new MemoryInputSynapse();
+		inputSynapse.setInputArray(inputArray);
+		inputSynapse.setAdvancedColumnSelector("1-9");
+		input.removeAllInputs();
+		input.addInputSynapse(inputSynapse);
+		//Archivo salida con resultados
+		MemoryOutputSynapse memOut= new MemoryOutputSynapse();
+		output.addOutputSynapse(memOut);
     //Monitor
     Monitor monitor= nnet.getMonitor();
     monitor.setTrainingPatterns(TRAINING_PATTERNS);
     monitor.setTotCicles(CICLES_NOT_TRAINING);
     monitor.setLearning(false);
     if(nnet != null) {
-        nnet.addOutputSynapse(foutput);
-        nnet.getMonitor().setSingleThreadMode(true);
-        nnet.go();
+    	nnet.removeAllListeners();
+    	nnet.getMonitor().setSingleThreadMode(true);
+      nnet.go();
     }
+    
+    double[] pattern = memOut.getNextPattern();
+    BigDecimal[] results= new BigDecimal[9];
+    for(int i = 0; i < 9; i++) 
+    	results[i]= new BigDecimal(pattern[i]);
+    return results;
 	}
 	
 	@Override
@@ -222,21 +245,6 @@ public class RedNeuronalTaTeTi implements Serializable, NeuralNetListener {
 		}
 		return lines;
 	}
-	
-	private int[] getResults() {
-		int results[]= null;
-		String sCadena= null;
-		try {
-			BufferedReader bf = new BufferedReader(new FileReader(PATH_RESULTS));
-			try {
-				while ((sCadena = bf.readLine())!=null)
-					System.out.println(sCadena);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} 
-    return results;
-	}
 }
+
+

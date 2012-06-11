@@ -3,6 +3,7 @@ package modelo.entrenamiento;
 import modelo.entrenamiento.ag.ConstantesAG;
 import modelo.entrenamiento.ag.FuncionAptitudTaTeTi;
 import modelo.entrenamiento.ag.GeneTaTeTi;
+import modelo.red_neuronal.RedNeuronalTaTeTi;
 
 import org.jgap.Chromosome;
 import org.jgap.Configuration;
@@ -19,12 +20,14 @@ public class Entrenador {
 	private FitnessFunction myFunc;
 	private Genotype poblacion;
 	private boolean cargaSatisfactoria;
+	private RedNeuronalTaTeTi RN_TaTeTi;
 	
 	public Entrenador() {
 		//Configuramos JGAP por Default
 		configuracion= new DefaultConfiguration();
     myFunc= new FuncionAptitudTaTeTi();
 		cargaSatisfactoria= false;
+		RN_TaTeTi= new RedNeuronalTaTeTi();
 	}
 	
 	public void cargar() {	
@@ -78,5 +81,15 @@ public class Entrenador {
 	
 	public boolean esCargaSatisfactoria() {
 		return cargaSatisfactoria;
+	}
+	
+	//Entrenamiento RN
+	public void entrenarRedNeuronal(String pathInputFile) {
+		RN_TaTeTi.iniciarRedNeuronal();
+		RN_TaTeTi.entrenar(pathInputFile);
+	}
+
+	public void salvarRedNeuronal(String pathSafeFile) {
+		RN_TaTeTi.salvarRedNeuronal(pathSafeFile);
 	}
 }
