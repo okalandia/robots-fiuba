@@ -44,4 +44,9 @@ public class Tablero {
 				return false;
 		return true;
 	}
+	
+	public void limpiarTablero() {
+		for(int i = 0; i < getCantidadCasilleros(); i++)
+			casilleros[i]= Ficha.VACIO;
+	}
 }

@@ -1,11 +1,9 @@
 package controlador;
 
+import modelo.Constantes;
 import modelo.entrenamiento.Entrenador;
 
 public class ControladorEntrenamiento {
-	
-	private static String PATH_INPUT_FILE= "data/Archivo-Entrenamiento-Prueba.txt";
-	private static String PATH_SAFE_FILE= "data/Red-Neuronal-TaTeTi.ser";
 	
 	private Entrenador entrenador;
 	
@@ -14,10 +12,10 @@ public class ControladorEntrenamiento {
 	}
 	
 	public void entrenarRedNeuronalTaTeTi() {
-		entrenador.entrenarRedNeuronal(PATH_INPUT_FILE);		
+		entrenador.entrenarRedNeuronal(Constantes.ARCH_ENTRENAMIENTO_RN_TATETI);		
 	}
 
 	public void salvarRedNeuronalTaTeTi() {
-		entrenador.salvarRedNeuronal(PATH_SAFE_FILE);
+		entrenador.salvarRedNeuronal(Constantes.ARCH_RN_TATETI);
 	}
 }

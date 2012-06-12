@@ -1,5 +1,6 @@
 import java.math.BigDecimal;
 
+import modelo.Constantes;
 import modelo.red_neuronal.RedNeuronalTaTeTi;
 import controlador.ControladorEntrenamiento;
 
@@ -12,9 +13,9 @@ public class MainEntrenamiento {
 		
 		//Prueba BORRAR!
 		RedNeuronalTaTeTi rn= new RedNeuronalTaTeTi();
-		rn.restaurarRedNeuronal("data/Red-Neuronal-TaTeTi.ser");
+		rn.restaurarRedNeuronal(Constantes.ARCH_RN_TATETI);
 		double[][] inputArray= new double[][] {
-				{0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, -1.0}  	
+				{-1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0}  	
 		};
 		BigDecimal[] resultados= rn.preguntar(inputArray);
 		for (int i = 0; i < resultados.length; i++) {

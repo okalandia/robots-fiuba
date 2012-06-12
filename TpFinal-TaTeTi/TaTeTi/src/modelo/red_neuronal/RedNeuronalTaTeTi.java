@@ -11,6 +11,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Scanner;
 
+import modelo.Constantes;
 import modelo.logger.LoggerTaTeTi;
 
 import org.apache.log4j.Logger;
@@ -30,12 +31,6 @@ import org.joone.net.NeuralNet;
 public class RedNeuronalTaTeTi implements Serializable, NeuralNetListener {
 
 	private static final long serialVersionUID = 1L;
-
-  private static double	LEARNING_RATE= 0.7;
-  private static double	MOMENTUM= 0.6;
-  private static int	CICLES_TRAINIG= 100000;
-  private static int	CICLES_NOT_TRAINING= 1;
-  private static int TRAINING_PATTERNS= 1;
 
   private static Logger logger;
   private NeuralNet nnet;
@@ -115,12 +110,12 @@ public class RedNeuronalTaTeTi implements Serializable, NeuralNetListener {
     trainer.setDesired(outputDesired);
 		//Monitor
     Monitor monitor= nnet.getMonitor();
-    monitor.setLearningRate(LEARNING_RATE);
-    monitor.setMomentum(MOMENTUM);
+    monitor.setLearningRate(Constantes.LEARNING_RATE);
+    monitor.setMomentum(Constantes.MOMENTUM);
     monitor.setTrainingPatterns(getNumberOfLines(inputFile));
     monitor.setSupervised(true);
     monitor.setUseRMSE(true);
-    monitor.setTotCicles(CICLES_TRAINIG);
+    monitor.setTotCicles(Constantes.CICLES_TRAINIG);
     monitor.setLearning(true);
     long initms= System.currentTimeMillis();
     //La red se corre en single-thread, synchronized mode
@@ -186,8 +181,8 @@ public class RedNeuronalTaTeTi implements Serializable, NeuralNetListener {
 		output.addOutputSynapse(memOut);
     //Monitor
     Monitor monitor= nnet.getMonitor();
-    monitor.setTrainingPatterns(TRAINING_PATTERNS);
-    monitor.setTotCicles(CICLES_NOT_TRAINING);
+    monitor.setTrainingPatterns(Constantes.TRAINING_PATTERNS);
+    monitor.setTotCicles(Constantes.CICLES_NOT_TRAINING);
     monitor.setLearning(false);
     if(nnet != null) {
     	nnet.removeAllListeners();
