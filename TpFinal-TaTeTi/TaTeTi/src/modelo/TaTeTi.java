@@ -50,6 +50,7 @@ public class TaTeTi extends Observable {
 				notifyObservers("Ingrese su jugada: ");
 			}
 			jugada= jugadorDeTurno.jugar();
+			System.out.println("Proxima Jugada: " + jugada);
 			try {
 				tablero.agregarFicha(jugada, jugadorDeTurno.getFicha());
 				setChanged();
@@ -58,7 +59,10 @@ public class TaTeTi extends Observable {
 				jugadorDeTurno = jugadorAnterior;
 				jugadorAnterior = temp;
 			} catch (JugadaInvalida e) {
-				System.err.println("Jugada Invalida\n");
+				if(jugadorDeTurno.getEstrategia() instanceof EstrategiaHumano) {
+					setChanged();
+					notifyObservers("Jugada invalida. ");
+				}
 			}
 		} while(!juegoTerminado() && !tablero.tableroCompleto());
 		setChanged();
