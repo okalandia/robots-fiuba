@@ -29,7 +29,7 @@ public class TaTeTi extends Observable {
 	}
 
 	private void setTablero(Tablero tablero) {
-		this.tablero = tablero;
+		this.tablero= tablero;
 	}
 	
 	public void crearJugador(Ficha ficha, Estrategia estrategia) {
@@ -104,5 +104,4 @@ public class TaTeTi extends Observable {
 	public Jugador getJugadorGanador() {
 		return jugadorGanador;
 	}
-	
 }

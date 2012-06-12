@@ -1,13 +1,16 @@
 package vista;
 
 import java.util.Iterator;
+import java.util.Scanner;
 
 public class TableroVista {
 
 	private int cant_casilleros;
+	private Scanner in;
 	
 	public TableroVista(int ancho) {
 		cant_casilleros= ancho*ancho;
+		in= new Scanner(System.in);
 	}
 	
 	public void dibujar() {
@@ -35,4 +38,9 @@ public class TableroVista {
 	public void mostrar(String mensaje) {
 		System.out.print(mensaje);
 	}
+	
+	public String obtenerRespuesta() {
+		return in.nextLine();
+	}
+	
 }
