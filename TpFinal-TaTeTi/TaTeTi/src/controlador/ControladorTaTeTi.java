@@ -29,17 +29,24 @@ public class ControladorTaTeTi implements Observer {
 	}
 	
 	public void jugarTaTeTi() {
-		boolean seguirJugando= false;
+		boolean seguirJugando;
 		do {
 			crearJugadores();
 			tateti.jugar();
 			terminarJuego();
-			tableroVista.mostrar("Desea jugar de nuevo? (s/n): ");
-			if((tableroVista.obtenerRespuesta().compareTo("s")) == 0) {
-				seguirJugando= true;
-				tateti.getTablero().limpiarTablero();
-			}
+			seguirJugando= hayOtraProximaPartida();
 		} while(seguirJugando);
+	}
+
+	private boolean hayOtraProximaPartida() {
+		boolean seguirJugando;
+		tableroVista.mostrar("Desea jugar de nuevo? (s/n): ");
+		if((tableroVista.obtenerRespuesta().compareTo("s")) == 0) {
+			seguirJugando= true;
+			tateti.getTablero().limpiarTablero();
+		} else
+			seguirJugando= false;
+		return seguirJugando;
 	}
 
 	private void crearJugadores() {
