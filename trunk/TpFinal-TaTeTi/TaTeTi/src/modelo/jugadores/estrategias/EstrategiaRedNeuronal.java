@@ -41,8 +41,6 @@ public class EstrategiaRedNeuronal extends EstrategiaComputadora {
 		if(!esTableroAnterior(tabl)) {
 			BigDecimal[] resultados= rn.preguntar(tabl);
 			cargarJugadas(resultados);
-			ordenarJugadas();
-			cargarJugadas2();
 			tableroAnterior= tabl;
 			posicion= 0;
 		} else posicion++;
@@ -62,11 +60,17 @@ public class EstrategiaRedNeuronal extends EstrategiaComputadora {
 	}
 
 	private void cargarJugadas(BigDecimal[] resultados) {
+		crearMap(resultados);
+		ordenarJugadas();
+		cargarJugadasEnVector();
+	}
+	
+	private void crearMap(BigDecimal[] resultados) {
 		jugadas= new LinkedHashMap<Integer, BigDecimal>(9);
 		for (int i = 0; i < resultados.length; i++)
 			jugadas.put(new Integer(i), resultados[i]);		
 	}
-	
+
 	private void ordenarJugadas() {
 		LinkedHashMap<Integer,BigDecimal> newMap= new LinkedHashMap<Integer,BigDecimal>();
 		ArrayList<BigDecimal> values= new ArrayList<BigDecimal>(jugadas.values());
@@ -81,7 +85,7 @@ public class EstrategiaRedNeuronal extends EstrategiaComputadora {
 		}
 	}
 	
-	private void cargarJugadas2() {
+	private void cargarJugadasEnVector() {
 		jugadasA= new int[9];
 		ArrayList<Integer> values= new ArrayList<Integer>(jugadas.keySet());
 		Iterator<Integer> it= values.iterator();
