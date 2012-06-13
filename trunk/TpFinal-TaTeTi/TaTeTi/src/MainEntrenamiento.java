@@ -1,15 +1,15 @@
 import java.math.BigDecimal;
 
 import modelo.Constantes;
+import modelo.entrenamiento.Entrenador;
 import modelo.red_neuronal.RedNeuronalTaTeTi;
-import controlador.ControladorEntrenamiento;
 
 public class MainEntrenamiento {
 
 	public static void main(String[] args) {
-		ControladorEntrenamiento controlador= new ControladorEntrenamiento();
-		controlador.entrenarRedNeuronalTaTeTi();
-		controlador.salvarRedNeuronalTaTeTi();
+		Entrenador entrenador= new Entrenador();
+		entrenador.entrenarRedNeuronal(Constantes.ARCH_ENTRENAMIENTO_RN_TATETI);
+		entrenador.salvarRedNeuronal(Constantes.ARCH_RN_TATETI);
 		
 		//Prueba BORRAR!
 		RedNeuronalTaTeTi rn= new RedNeuronalTaTeTi();

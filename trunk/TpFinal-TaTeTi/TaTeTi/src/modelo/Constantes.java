@@ -1,7 +1,6 @@
 package modelo;
 
 public class Constantes {
-
 	//LOGGER
 	public static final String ARCH_LOGS= "logs/log4j.properties";
 	
@@ -13,4 +12,8 @@ public class Constantes {
   public static final int TRAINING_PATTERNS= 1;
 	public static final String ARCH_ENTRENAMIENTO_RN_TATETI= "data/Entrenamiento-TaTeTi.txt";
 	public static final String ARCH_RN_TATETI= "data/RN-TaTeTi.snet";
+	
+	//ALGORITMOS GENETICOS
+	public static final int POBLACION_INICIAL= 500;
+	public static final int GENERACIONES= 5000;
 }
