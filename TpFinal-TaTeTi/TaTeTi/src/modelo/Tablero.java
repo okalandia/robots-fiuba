@@ -20,7 +20,7 @@ public class Tablero {
 	
 	public void agregarFicha(int posicion, Ficha ficha) throws JugadaInvalida {
 		if(posicion < 0 || posicion > getCantidadCasilleros())
-			throw new JugadaInvalida("La posicion no valida.");
+			throw new JugadaInvalida("La posicion no es valida.");
 		if(estaOcupado(posicion))
 			throw new JugadaInvalida("La posicion se encuentra ocupada.");
 		casilleros[posicion]= ficha;
