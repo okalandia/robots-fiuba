@@ -124,6 +124,35 @@ public class RedNeuronalTaTeTi implements Serializable, NeuralNetListener {
     logger.info("Tiempo total entrenamiento= "+(System.currentTimeMillis() - initms)+" ms");
 	}
 	
+	public void entrenar(double[][] inputArray) {
+		//Entrada
+		MemoryInputSynapse inputSynapse= new MemoryInputSynapse();
+		inputSynapse.setInputArray(inputArray);
+		inputSynapse.setAdvancedColumnSelector("1-9");
+		input.removeAllInputs();
+		input.addInputSynapse(inputSynapse);
+	   //Salida Deseada
+		MemoryInputSynapse outputDesired= new MemoryInputSynapse();
+		outputDesired.setInputArray(inputArray);
+    outputDesired.setAdvancedColumnSelector("10-18");
+    trainer.setDesired(outputDesired);
+		//Monitor
+    Monitor monitor= nnet.getMonitor();
+    monitor.setLearningRate(Constantes.LEARNING_RATE);
+    monitor.setMomentum(Constantes.MOMENTUM);
+    monitor.setTrainingPatterns(1);
+    monitor.setSupervised(true);
+    monitor.setUseRMSE(true);
+    monitor.setTotCicles(Constantes.CICLES_TRAINING_PLAYING);
+    monitor.setLearning(true);
+    long initms= System.currentTimeMillis();
+    //La red se corre en single-thread, synchronized mode
+    nnet.getMonitor().setSingleThreadMode(true);
+    nnet.go(true);
+    logger.info("Tiempo total entrenamiento= "+(System.currentTimeMillis() - initms)+" ms");
+
+	}
+	
 	public boolean salvarRedNeuronal(String filename) {
 		boolean save= true;
 		FileOutputStream stream;

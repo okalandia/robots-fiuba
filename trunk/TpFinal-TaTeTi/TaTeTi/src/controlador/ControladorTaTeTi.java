@@ -16,7 +16,7 @@ public class ControladorTaTeTi implements Observer {
 	
 	private TableroVista tableroVista;
 	private TaTeTi tateti;
-	
+
 	public ControladorTaTeTi() {
 		tableroVista= new TableroVista(3);
 		tateti= TaTeTi.getInstancia();
@@ -36,6 +36,7 @@ public class ControladorTaTeTi implements Observer {
 			terminarJuego();
 			seguirJugando= hayOtraProximaPartida();
 		} while(seguirJugando);
+			tateti.guardar();
 	}
 
 	private boolean hayOtraProximaPartida() {
