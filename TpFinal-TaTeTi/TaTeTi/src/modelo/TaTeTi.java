@@ -6,6 +6,8 @@ import modelo.excepciones.JugadaInvalida;
 import modelo.jugadores.Jugador;
 import modelo.jugadores.estrategias.Estrategia;
 import modelo.jugadores.estrategias.EstrategiaHumano;
+import modelo.jugadores.estrategias.EstrategiaRedNeuronal;
+import modelo.red_neuronal.Entrenador;
 
 public class TaTeTi extends Observable {
 	
@@ -13,11 +15,14 @@ public class TaTeTi extends Observable {
 	private Jugador jugadorCruz;
 	private Jugador jugadorCirculo;
 	private Jugador jugadorGanador;
+	private Entrenador entrenador;
 	
 	private static final TaTeTi instancia = new TaTeTi();
 	
 	private TaTeTi() {
 		setTablero(new Tablero());
+		entrenador= new Entrenador();
+		entrenador.iniciarRN();
 	}
 	
 	public static TaTeTi getInstancia() {
@@ -53,6 +58,7 @@ public class TaTeTi extends Observable {
 			System.out.println("Proxima Jugada: " + jugada);
 			try {
 				tablero.agregarFicha(jugada, jugadorDeTurno.getFicha());
+				entrenador.agregarPosicionJugada(jugada);
 				setChanged();
 				notifyObservers();
 				temp = jugadorDeTurno;
@@ -65,10 +71,34 @@ public class TaTeTi extends Observable {
 				}
 			}
 		} while(!juegoTerminado() && !tablero.tableroCompleto());
+		if((jugadorCruz.getEstrategia() instanceof EstrategiaRedNeuronal
+				|| jugadorCirculo.getEstrategia() instanceof EstrategiaRedNeuronal)) {
+			entrenador.entrenarRedNeuronalConMemoria(getTurnoNN(), getResultadoNN());
+			entrenador.salvarRedNeuronal(Constantes.ARCH_RN_TATETI);
+		}
 		setChanged();
 		notifyObservers();
+		entrenador.reiniciarJugada();	
 	}
 	
+	private boolean getResultadoNN() {
+		boolean gano;
+		if(jugadorCruz.getEstrategia() instanceof EstrategiaRedNeuronal)
+			gano= gano(jugadorCruz.getFicha());
+		else
+			gano= gano(jugadorCirculo.getFicha());;
+		return gano;
+	}
+
+	private int getTurnoNN() {
+		int turno= -1;
+		if(jugadorCruz.getEstrategia() instanceof EstrategiaRedNeuronal)
+			turno= 0;
+		if(jugadorCirculo.getEstrategia() instanceof EstrategiaRedNeuronal)
+			turno= 1;
+		return turno;
+	}
+
 	private boolean juegoTerminado() {
 		if(gano(Ficha.CRUZ)) {
 			jugadorGanador= jugadorCruz;
@@ -107,5 +137,9 @@ public class TaTeTi extends Observable {
 	
 	public Jugador getJugadorGanador() {
 		return jugadorGanador;
+	}
+
+	public void guardar() {
+		entrenador.salvarRedNeuronal(Constantes.ARCH_RN_TATETI);
 	}
 }

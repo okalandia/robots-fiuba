@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import modelo.Constantes;
 import modelo.Ficha;
@@ -40,10 +41,17 @@ public class EstrategiaRedNeuronal extends EstrategiaComputadora {
 		}	
 		if(!esTableroAnterior(tabl)) {
 			BigDecimal[] resultados= rn.preguntar(tabl);
+			
+			for (int i = 0; i < resultados.length; i++) {
+				System.out.println(resultados[i]);
+			}
+			System.out.println();
+			
 			cargarJugadas(resultados);
 			tableroAnterior= tabl;
 			posicion= 0;
 		} else posicion++;
+		
 		return jugadasA[posicion];
 	}
 
@@ -61,8 +69,7 @@ public class EstrategiaRedNeuronal extends EstrategiaComputadora {
 
 	private void cargarJugadas(BigDecimal[] resultados) {
 		crearMap(resultados);
-		ordenarJugadas();
-		cargarJugadasEnVector();
+		ordenaryCargarJugadasEnVector();
 	}
 	
 	private void crearMap(BigDecimal[] resultados) {
@@ -71,7 +78,7 @@ public class EstrategiaRedNeuronal extends EstrategiaComputadora {
 			jugadas.put(new Integer(i), resultados[i]);		
 	}
 
-	private void ordenarJugadas() {
+	private void ordenaryCargarJugadasEnVector() {
 		LinkedHashMap<Integer,BigDecimal> newMap= new LinkedHashMap<Integer,BigDecimal>();
 		ArrayList<BigDecimal> values= new ArrayList<BigDecimal>(jugadas.values());
 		Collections.sort(values);
@@ -83,15 +90,17 @@ public class EstrategiaRedNeuronal extends EstrategiaComputadora {
 				if(tmp==k.getValue()) newMap.put(k.getKey(), k.getValue());
 			}
 		}
+		cargarEnVector(newMap);	
 	}
-	
-	private void cargarJugadasEnVector() {
+
+	private void cargarEnVector(LinkedHashMap<Integer, BigDecimal> newMap) {
+		Iterator<Entry<Integer, BigDecimal>> ite= newMap.entrySet().iterator();
 		jugadasA= new int[9];
-		ArrayList<Integer> values= new ArrayList<Integer>(jugadas.keySet());
-		Iterator<Integer> it= values.iterator();
-		int i= 0;
-		for (it= values.iterator(); it.hasNext(); i++) {
-			jugadasA[i]= (it.next()).intValue();
-		}
+		int i= 8;
+		while (ite.hasNext()) {
+			Map.Entry<Integer, BigDecimal> e= (Map.Entry<Integer, BigDecimal>)ite.next();
+			jugadasA[i]= (Integer) e.getKey();
+			i--;
+		}			
 	}
 }
