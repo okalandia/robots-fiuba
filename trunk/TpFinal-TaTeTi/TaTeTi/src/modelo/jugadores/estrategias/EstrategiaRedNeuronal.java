@@ -31,8 +31,8 @@ public class EstrategiaRedNeuronal extends EstrategiaComputadora {
 	@Override
 	public int generarJugada(Tablero tablero) {
 		double[][] tabl= new double[1][9];
-		double valor= 0.0;
 		for (int i = 0; i < 9; i++) {
+			double valor= 0.0;
 			if(tablero.getCasillero(i) != Ficha.VACIO) {
 				if((tablero.getCasillero(i).compareTo(ficha)) == 0) valor= 1.0;
 				else valor= -1.0;
@@ -42,9 +42,9 @@ public class EstrategiaRedNeuronal extends EstrategiaComputadora {
 		if(!esTableroAnterior(tabl)) {
 			BigDecimal[] resultados= rn.preguntar(tabl);
 			
-			for (int i = 0; i < resultados.length; i++) {
-				System.out.println(resultados[i]);
-			}
+			//for (int i = 0; i < resultados.length; i++) {
+			//	System.out.println(resultados[i]);
+			//}
 			System.out.println();
 			
 			cargarJugadas(resultados);
@@ -58,7 +58,7 @@ public class EstrategiaRedNeuronal extends EstrategiaComputadora {
 	private boolean esTableroAnterior(double[][] tableroIngresado) {
 		if(tableroAnterior == null) return false;
 		boolean iguales= true;
-		for(int i = 0; i < tableroIngresado.length; i++) {
+		for(int i = 0; i < tableroIngresado[0].length; i++) {
 			if(tableroAnterior[0][i] != tableroIngresado[0][i]) {
 				iguales= false;
 				break;
