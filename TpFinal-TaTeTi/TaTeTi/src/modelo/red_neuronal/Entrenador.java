@@ -29,10 +29,10 @@ public class Entrenador {
 	}
 	
 	public void iniciarRN() {
+		RN_TaTeTi.iniciarRedNeuronal();
 		File fichero= new File(Constantes.ARCH_RN_TATETI);
 		if(!fichero.exists()) {
 			System.out.println("Archivo no existe");
-			RN_TaTeTi.iniciarRedNeuronal();
 			RN_TaTeTi.salvarRedNeuronal(Constantes.ARCH_RN_TATETI);
 		}	
 	}
@@ -40,7 +40,8 @@ public class Entrenador {
 	public void entrenarRedNeuronalConArchivo(String pathInputFile) {
 		System.out.println("-- ENTRENANDO RED --");
 		RN_TaTeTi.iniciarRedNeuronal();
-		RN_TaTeTi.entrenar(pathInputFile);
+		//TODO:descomentar
+		//RN_TaTeTi.entrenar(pathInputFile);
 	}
 	
 	public void entrenarRedNeuronalConMemoria(int turnoInicialRN, boolean gano) {
@@ -58,18 +59,20 @@ public class Entrenador {
 				if(valor == 1) {
 					guardar[0][9+posicion]= generarPuntaje(gano);
 					RN_TaTeTi.entrenar(guardar);
-					System.out.println("A GUARDAR");
-					for (int j= 0; j < 18; j++) {
-						System.out.print(guardar[0][j] + ",");
-					}
-					System.out.println();
+					//System.out.println("A GUARDAR");
+					//for (int j= 0; j < 18; j++) {
+					//	System.out.print(guardar[0][j] + ",");
+					//}
+					//System.out.println();
+					guardar[0][posicion] = 1;
 					guardar[0][9+posicion]= 0;
 				} else
 					guardar[0][posicion]= valor;
 			}
 		}
-		if(!gano)
-			reforzar(jugadas[turno], guardar);
+		//Comento porque incentiva a la red a jugar siempre en el lugar donde hubiera bloqueado la victoria rival
+		//if(!gano)
+		//	reforzar(jugadas[turno], guardar);
 	}
 
 	private void reforzar(int posicion, double[][] guardar) {
@@ -86,7 +89,7 @@ public class Entrenador {
 	private double generarPuntaje(boolean gano) {
 		if(gano)
 			return 1.0;
-		return -0.5;
+		return -1.0;
 	}
 
 	private int obtenerValor(int turnoInicialRN, int turnoActual) {

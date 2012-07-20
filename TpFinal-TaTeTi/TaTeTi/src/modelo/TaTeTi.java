@@ -73,7 +73,16 @@ public class TaTeTi extends Observable {
 		} while(!juegoTerminado() && !tablero.tableroCompleto());
 		if((jugadorCruz.getEstrategia() instanceof EstrategiaRedNeuronal
 				|| jugadorCirculo.getEstrategia() instanceof EstrategiaRedNeuronal)) {
-			entrenador.entrenarRedNeuronalConMemoria(getTurnoNN(), getResultadoNN());
+			int turnoNN = getTurnoNN(); 
+			int turnoRival = (turnoNN + 1) % 2;
+			boolean resultadoNN = getResultadoNN();
+			boolean resultadoRival = getResultadoRival();
+			if (resultadoNN || resultadoRival){
+				for (int i = 0; i < 10; i++){
+					entrenador.entrenarRedNeuronalConMemoria(turnoNN, resultadoNN);
+					entrenador.entrenarRedNeuronalConMemoria(turnoRival, resultadoRival);
+				}
+			}
 			entrenador.salvarRedNeuronal(Constantes.ARCH_RN_TATETI);
 		}
 		setChanged();
@@ -90,6 +99,15 @@ public class TaTeTi extends Observable {
 		return gano;
 	}
 
+	private boolean getResultadoRival(){
+		boolean gano;
+		if(jugadorCruz.getEstrategia() instanceof EstrategiaRedNeuronal)
+			gano= gano(jugadorCirculo.getFicha());
+		else
+			gano= gano(jugadorCruz.getFicha());;
+		return gano;		
+	}
+	
 	private int getTurnoNN() {
 		int turno= -1;
 		if(jugadorCruz.getEstrategia() instanceof EstrategiaRedNeuronal)
@@ -106,6 +124,10 @@ public class TaTeTi extends Observable {
 		}
 		else if(gano(Ficha.CIRCULO)){
 			jugadorGanador= jugadorCirculo;
+			return true;
+		}
+		else if (tablero.tableroCompleto()){
+			jugadorGanador = null;
 			return true;
 		}
 		else return false;
