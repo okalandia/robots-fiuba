@@ -10,6 +10,7 @@ import modelo.TaTeTi;
 import modelo.jugadores.Jugador;
 import modelo.jugadores.estrategias.Estrategia;
 import modelo.jugadores.estrategias.EstrategiaHumano;
+import modelo.jugadores.estrategias.EstrategiaProcedural;
 import modelo.jugadores.estrategias.EstrategiaRandom;
 import modelo.jugadores.estrategias.EstrategiaRedNeuronal;
 
@@ -22,6 +23,7 @@ public class ControladorTaTeTi implements Observer {
 	static final public int ESTRATEGIA_HUMANO = 1;
 	static final public int ESTRATEGIA_RANDOM = 2;
 	static final public int ESTRATEGIA_RED_NEURONAL = 3;
+	static final public int ESTRATEGIA_PROCEDURAL = 4;
 	
 	public ControladorTaTeTi() {
 		tableroVista= new TableroVista(3);
@@ -103,6 +105,9 @@ public class ControladorTaTeTi implements Observer {
 		}
 		else if (estrategia == ESTRATEGIA_RED_NEURONAL){
 			return new EstrategiaRedNeuronal(ficha);
+		}
+		else if (estrategia == ESTRATEGIA_PROCEDURAL){
+			return new EstrategiaProcedural(ficha);
 		}
 		return null;
 	}
