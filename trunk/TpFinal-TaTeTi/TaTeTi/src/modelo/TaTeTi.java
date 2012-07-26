@@ -80,8 +80,9 @@ public class TaTeTi extends Observable {
 			if (resultadoNN || resultadoRival){
 				entrenador.entrenarRedNeuronalConMemoria(turnoNN, resultadoNN);
 				entrenador.entrenarRedNeuronalConMemoria(turnoRival, resultadoRival);
+				entrenador.salvarRedNeuronal(Constantes.ARCH_RN_TATETI);
 			}
-			entrenador.salvarRedNeuronal(Constantes.ARCH_RN_TATETI);
+			
 		}
 		setChanged();
 		notifyObservers();
