@@ -105,7 +105,7 @@ public class ControladorTaTeTi implements Observer {
 			return new EstrategiaRandom();
 		}
 		else if (estrategia == ESTRATEGIA_RED_NEURONAL){
-			return new EstrategiaRedNeuronal(ficha);
+			return new EstrategiaRedNeuronal(ficha, tateti.getRedNeuronal());
 		}
 		else if (estrategia == ESTRATEGIA_PROCEDURAL){
 			return new EstrategiaProcedural(ficha);

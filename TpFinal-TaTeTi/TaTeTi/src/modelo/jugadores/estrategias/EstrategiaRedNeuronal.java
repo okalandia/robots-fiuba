@@ -8,7 +8,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import modelo.Constantes;
 import modelo.Ficha;
 import modelo.Tablero;
 import modelo.red_neuronal.RedNeuronalTaTeTi;
@@ -22,9 +21,8 @@ public class EstrategiaRedNeuronal extends EstrategiaComputadora {
 	private int posicion;
 	private int[] jugadasA;
 	
-	public EstrategiaRedNeuronal(Ficha ficha) {
-		rn= new RedNeuronalTaTeTi();
-		rn.restaurarRedNeuronal(Constantes.ARCH_RN_TATETI);
+	public EstrategiaRedNeuronal(Ficha ficha, RedNeuronalTaTeTi redNeuronal) {
+		rn= redNeuronal;
 		this.ficha= ficha;
 	}
 	
@@ -40,13 +38,7 @@ public class EstrategiaRedNeuronal extends EstrategiaComputadora {
 			tabl[0][i]= valor;
 		}	
 		if(!esTableroAnterior(tabl)) {
-			BigDecimal[] resultados= rn.preguntar(tabl);
-			
-			//for (int i = 0; i < resultados.length; i++) {
-			//	System.out.println(resultados[i]);
-			//}
-			System.out.println();
-			
+			BigDecimal[] resultados= rn.preguntar(tabl);	
 			cargarJugadas(resultados);
 			tableroAnterior= tabl;
 			posicion= 0;
