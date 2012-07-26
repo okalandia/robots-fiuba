@@ -78,10 +78,8 @@ public class TaTeTi extends Observable {
 			boolean resultadoNN = getResultadoNN();
 			boolean resultadoRival = getResultadoRival();
 			if (resultadoNN || resultadoRival){
-				for (int i = 0; i < 10; i++){
-					entrenador.entrenarRedNeuronalConMemoria(turnoNN, resultadoNN);
-					entrenador.entrenarRedNeuronalConMemoria(turnoRival, resultadoRival);
-				}
+				entrenador.entrenarRedNeuronalConMemoria(turnoNN, resultadoNN);
+				entrenador.entrenarRedNeuronalConMemoria(turnoRival, resultadoRival);
 			}
 			entrenador.salvarRedNeuronal(Constantes.ARCH_RN_TATETI);
 		}

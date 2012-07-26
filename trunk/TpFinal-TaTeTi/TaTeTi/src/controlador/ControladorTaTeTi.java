@@ -83,6 +83,7 @@ public class ControladorTaTeTi implements Observer {
 		else{
 			tableroVista.mostrar("Comienza Jugador 2\n");
 		}
+
 		comienzaJugador1 = !comienzaJugador1;
 		tateti.crearJugador(ficha1, crearEstrategia(estrategia1, ficha1));
 			
@@ -119,7 +120,7 @@ public class ControladorTaTeTi implements Observer {
 			String ficha= jugadorGanador.getFicha().name();
 			tableroVista.mostrar("Jugador " + ficha + " gano la partida.\n");
 		} else {
-			tableroVista.mostrar("La partida termino empatado.\n");			
+			tableroVista.mostrar("La partida termino empatada.\n");			
 		}
 	}
 	
