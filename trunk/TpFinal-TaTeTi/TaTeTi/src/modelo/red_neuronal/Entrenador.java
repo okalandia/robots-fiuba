@@ -29,12 +29,14 @@ public class Entrenador {
 	}
 	
 	public void iniciarRN() {
-		RN_TaTeTi.iniciarRedNeuronal();
 		File fichero= new File(Constantes.ARCH_RN_TATETI);
 		if(!fichero.exists()) {
-			System.out.println("Archivo no existe");
+			System.out.println("Archivo no existe - Sin restauracion");
+			RN_TaTeTi.iniciarRedNeuronal();
 			RN_TaTeTi.salvarRedNeuronal(Constantes.ARCH_RN_TATETI);
-		}	
+		} else
+			if(RN_TaTeTi.restaurarRedNeuronal(Constantes.ARCH_RN_TATETI))
+				System.out.println("Restauracion Correcta");
 	}
 	
 	public void entrenarRedNeuronalConArchivo(String pathInputFile) {
@@ -59,22 +61,33 @@ public class Entrenador {
 				if(valor == 1) {
 					guardar[0][9+posicion]= generarPuntaje(gano);
 					RN_TaTeTi.entrenar(guardar);
-					//System.out.println("A GUARDAR");
-					//for (int j= 0; j < 18; j++) {
-					//	System.out.print(guardar[0][j] + ",");
-					//}
-					//System.out.println();
+				//	imprimir(guardar);
+				//	System.out.println("GUARDO");
 					guardar[0][posicion] = 1;
 					guardar[0][9+posicion]= 0;
-				} else
+				} else {
 					guardar[0][posicion]= valor;
+				//	imprimir(guardar);
+				}
 			}
+
+			
 		}
 		//Comento porque incentiva a la red a jugar siempre en el lugar donde hubiera bloqueado la victoria rival
 		//if(!gano)
 		//	reforzar(jugadas[turno], guardar);
 	}
 
+	
+	private void imprimir(double[][] guardar) {
+		for (int j = 0; j < 18; j++) {
+			System.out.print(guardar[0][j] + " ");
+			if(j==8)
+				System.out.print(" | ");
+	}
+		System.out.println();
+	}
+	
 	private void reforzar(int posicion, double[][] guardar) {
 		guardar[0][posicion]= 0;
 		guardar[0][9+posicion]= 10;
@@ -88,8 +101,8 @@ public class Entrenador {
 
 	private double generarPuntaje(boolean gano) {
 		if(gano)
-			return 1.0;
-		return -1.0;
+			return 0.1;
+		return -0.1;
 	}
 
 	private int obtenerValor(int turnoInicialRN, int turnoActual) {
@@ -118,5 +131,9 @@ public class Entrenador {
 	
 	public void salvarRedNeuronal(String pathSafeFile) {
 		RN_TaTeTi.salvarRedNeuronal(pathSafeFile);
+	}
+	
+	public RedNeuronalTaTeTi getRedNeuronal() {
+		return RN_TaTeTi;
 	}
 }

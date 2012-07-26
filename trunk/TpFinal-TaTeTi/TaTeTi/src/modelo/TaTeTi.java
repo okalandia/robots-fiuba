@@ -8,6 +8,7 @@ import modelo.jugadores.estrategias.Estrategia;
 import modelo.jugadores.estrategias.EstrategiaHumano;
 import modelo.jugadores.estrategias.EstrategiaRedNeuronal;
 import modelo.red_neuronal.Entrenador;
+import modelo.red_neuronal.RedNeuronalTaTeTi;
 
 public class TaTeTi extends Observable {
 	
@@ -162,5 +163,9 @@ public class TaTeTi extends Observable {
 
 	public void guardar() {
 		entrenador.salvarRedNeuronal(Constantes.ARCH_RN_TATETI);
+	}
+	
+	public RedNeuronalTaTeTi getRedNeuronal() {
+		return entrenador.getRedNeuronal();
 	}
 }
