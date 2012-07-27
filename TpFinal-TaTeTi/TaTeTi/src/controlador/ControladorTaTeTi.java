@@ -49,6 +49,7 @@ public class ControladorTaTeTi implements Observer {
 	
 	public void simularPartidas(int cantidad, int estrategia1, int estrategia2){		
 		for (int i = 0; i < cantidad; i++){
+			System.out.println("Partida: " + i);
 			crearJugadores(estrategia1, estrategia2);
 			tateti.jugar();
 			terminarJuego();
