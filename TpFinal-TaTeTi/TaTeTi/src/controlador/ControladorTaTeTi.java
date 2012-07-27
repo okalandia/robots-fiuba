@@ -58,7 +58,7 @@ public class ControladorTaTeTi implements Observer {
 		}
 		tateti.guardar();
 	}
-
+	
 	private boolean hayOtraProximaPartida() {
 		boolean seguirJugando;
 		tableroVista.mostrar("Desea jugar de nuevo? (s/n): ");

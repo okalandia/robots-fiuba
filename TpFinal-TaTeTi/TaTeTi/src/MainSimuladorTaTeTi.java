@@ -17,6 +17,6 @@ public class MainSimuladorTaTeTi {
 		}
 		ControladorTaTeTi controlador= new ControladorTaTeTi();
 		controlador.cargarTaTeTi();
-		controlador.simularPartidas(500, ControladorTaTeTi.ESTRATEGIA_RED_NEURONAL, ControladorTaTeTi.ESTRATEGIA_PROCEDURAL);
+		controlador.simularPartidas(200, ControladorTaTeTi.ESTRATEGIA_RED_NEURONAL, ControladorTaTeTi.ESTRATEGIA_PROCEDURAL);
 	}
 }
