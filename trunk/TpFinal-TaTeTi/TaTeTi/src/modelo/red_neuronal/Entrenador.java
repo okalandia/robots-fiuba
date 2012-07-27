@@ -61,23 +61,19 @@ public class Entrenador {
 				if(valor == 1) {
 					guardar[0][9+posicion]= generarPuntaje(gano);
 					RN_TaTeTi.entrenar(guardar);
-				//	imprimir(guardar);
-				//	System.out.println("GUARDO");
+					imprimir(guardar);
+					System.out.println("GUARDO");
 					guardar[0][posicion] = 1;
-					guardar[0][9+posicion]= 0;
+					guardar[0][9+posicion]= -0.1;
 				} else {
 					guardar[0][posicion]= valor;
-				//	imprimir(guardar);
+				 imprimir(guardar);
 				}
 			}
 
 			
 		}
-		//Comento porque incentiva a la red a jugar siempre en el lugar donde hubiera bloqueado la victoria rival
-		//if(!gano)
-		//	reforzar(jugadas[turno], guardar);
 	}
-
 	
 	private void imprimir(double[][] guardar) {
 		for (int j = 0; j < 18; j++) {
@@ -87,22 +83,11 @@ public class Entrenador {
 	}
 		System.out.println();
 	}
-	
-	private void reforzar(int posicion, double[][] guardar) {
-		guardar[0][posicion]= 0;
-		guardar[0][9+posicion]= 10;
-		System.out.println("REFORZAR");		
-		for (int j= 0; j < 18; j++) {
-			System.out.print(guardar[0][j] + ",");
-		}
-		System.out.println();
-		RN_TaTeTi.entrenar(guardar);
-	}
 
 	private double generarPuntaje(boolean gano) {
 		if(gano)
-			return 0.1;
-		return -0.1;
+			return 1;
+		return 0;
 	}
 
 	private int obtenerValor(int turnoInicialRN, int turnoActual) {
