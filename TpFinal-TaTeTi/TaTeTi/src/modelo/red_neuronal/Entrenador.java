@@ -1,7 +1,6 @@
 package modelo.red_neuronal;
 
 import java.io.File;
-import java.util.Arrays;
 
 import modelo.Constantes;
 
@@ -10,7 +9,8 @@ public class Entrenador {
 	private RedNeuronalTaTeTi RN_TaTeTi;
 	private int nro_jugada;
 	private int[] jugadas;
-	
+	int orden_fichas[];
+
 	public Entrenador() {
 		RN_TaTeTi= new RedNeuronalTaTeTi();
 		jugadas= new int[9];
@@ -48,7 +48,7 @@ public class Entrenador {
 	}
 	
 	public void entrenarRedNeuronalConMemoria(int turnoInicialRN, boolean gano) {
-		entrenar(turnoInicialRN, gano);
+		entrenar2(turnoInicialRN, gano);
 	}
 
 	private void entrenar(int turnoInicialRN, boolean gano) {
@@ -75,175 +75,89 @@ public class Entrenador {
 	}
 	
 	private void entrenar2(int turnoInicialRN, boolean gano) {
-		double[][] guardar= inicializarJugada();
-		int posicion, valor, turno= 0;
-  		if(gano) {
-    		for(int i= 0; i < 9; i++) {
-    			if(jugadas[i] != -1) {
-    				turno= i;
-    				posicion= jugadas[turno];
-    				valor= obtenerValor(turnoInicialRN, turno);
-    				if(valor == 1) {
-    					guardar[0][9+posicion]= 0.5;
-    					RN_TaTeTi.entrenar(guardar);
-    					imprimir(guardar);
-    					System.out.println("GUARDO");
-    					guardar[0][posicion] = 1;
-    					guardar[0][9+posicion]= 0;
-    				} else {
-    					guardar[0][posicion]= valor;
-    				 imprimir(guardar);
-    				}
-    			}		
-    		}
-  		} else {
-  			System.out.print("Jugadas Peligrosas");
-  			obtenerParesPeligrosos(turnoInicialRN);
+		orden_fichas= inicializarFichas(turnoInicialRN);
+		if(!gano){
+ 			corregirParGanador();
 		}
 	}
 	
-	private void obtenerParesPeligrosos(int turnoInicialRN) {
-		int inicio;
-		if(turnoInicialRN == 0) inicio= 1;
-		else inicio= 0;
-		Arrays.sort(jugadas);
-		//Verifico si se jugo o no una ficha ahi
-		int pos[]= inicializarPosiciones();
-		for(int i= inicio; i < pos.length; i+=2) {
-			pos[i]= Arrays.binarySearch(jugadas, i);
-		}
+	private void corregirParGanador() {
 		//Pares peligrosos en Filas
-		controlarFila(pos[0], pos[1], pos[2], 0);
-		controlarFila(pos[3], pos[4], pos[5], 3);
-		controlarFila(pos[6], pos[7], pos[8], 6);
+		System.out.println("----------------Fila1");
+		corregir(0, 1, 2);
+		System.out.println("----------------Fila2");
+		corregir(3, 4, 5);
+		System.out.println("----------------Fila3");
+		corregir(6, 7, 8);
 		//Pares peligrosos en Columnas
-		controlarColumna(pos[0], pos[3], pos[6], 0);
-		controlarColumna(pos[1], pos[4], pos[7], 1);
-		controlarColumna(pos[2], pos[5], pos[8], 2);
+		System.out.println("----------------Columna1");
+		corregir(0, 3, 6);
+		System.out.println("----------------Columna2");
+		corregir(1, 4, 7);
+		System.out.println("----------------Columna3");
+		corregir(2, 5, 8);
 		//Pares peligrosos en Diagonales
-		controlarDiagonal1(pos[0], pos[4], pos[8], 0);
-		controlarDiagonal2(pos[2], pos[4], pos[6], 2);
+		System.out.println("----------------Diagonal1");
+		corregir(0, 4, 8);
+		System.out.println("----------------Diagonal2");
+		corregir(2, 4, 6);
 	}
 
-	private int[] inicializarPosiciones() {
-		int pos[]= new int[9];
-		for(int i= 0; i < pos.length; i++) 
-			pos[i]= -1;
-		return pos;
+	private int[] inicializarFichas(int turnoInicialRN) {
+		int fichas[]= new int[9];
+		for(int i= 0; i < fichas.length; i++) {
+			fichas[i]= -1;
+			if(((turnoInicialRN + i) % 2) == 0)
+				fichas[i]= 1;
+		}
+		return fichas;
 	}
-
-	private void controlarDiagonal2(int pos0, int pos1, int pos2, int posInicial) {
-		double[][] guardar;
-		if((pos0!=-1) && (pos1!=-1) && (pos2!=-1)) {
-			if((pos0!=-1) && (pos1!=-1)) {
-				guardar= inicializarJugada();
-				guardar[0][posInicial]= -1;
-				guardar[0][posInicial+2]= -1;	
-				guardar[0][9+posInicial+4]= 0.5;
-				RN_TaTeTi.entrenar(guardar);
-				imprimir(guardar);
-			} else if ((pos0!=-1) && (pos2!=-1)) {
-				guardar= inicializarJugada();
-				guardar[0][posInicial]= -1;
-				guardar[0][posInicial+4]= -1;	
-				guardar[0][9+posInicial+2]= 0.5;
-				RN_TaTeTi.entrenar(guardar);
-				imprimir(guardar);
-			} else {
-				guardar= inicializarJugada();
-				guardar[0][posInicial+2]= -1;
-				guardar[0][posInicial+4]= -1;	
-				guardar[0][9+posInicial]= 0.5;
-				RN_TaTeTi.entrenar(guardar);
-				imprimir(guardar);
+	
+	//TODO: Situacion que no contempla pares peligrosos que ya no sirve para
+	//ganar, por ejemplo si en la fila 1 habia una cruz y luego se jugaron
+	//2 circulos.
+	private void corregir(int pos0, int pos1, int pos2) {
+		double[][] guardar= inicializarJugada();
+		boolean lugar0, lugar1, lugar2, aprendio;
+		lugar0= false;
+		lugar1= false;
+		lugar2= false;
+		aprendio= false;
+		for(int i= 0; i < jugadas.length; i++) {
+			System.out.println("Jugada nro: " + i + " Posicion: " + jugadas[i]);
+			if(jugadas[i] != -1) {			
+  			if((lugar0 && lugar1) || (lugar0 && lugar2) || (lugar1 && lugar2)) {
+  				int lugar= pos0;
+  				if(lugar0 && lugar1)
+  					lugar= pos2;
+  				else if(lugar0 && lugar2)
+  					lugar= pos1;
+  			  if(jugadas[i] != lugar) {
+  			  	// castigo sino evito el ta-te-ti
+    				guardar[0][9+jugadas[i]]= -0.1;
+    				RN_TaTeTi.entrenar(guardar);
+    				imprimir(guardar);
+    				// la proxima debe evitar el ta-te-ti
+  					guardar[0][9+jugadas[i]]= 0;
+  					guardar[0][9+lugar]= 0.25; 
+  					RN_TaTeTi.entrenar(guardar);
+  					imprimir(guardar);
+  					aprendio= true;
+  			  }
+  			}
+  			if((pos0 == jugadas[i]) && (orden_fichas[i] == -1))
+  				lugar0= true;
+  			else if(pos1 == jugadas[i] && (orden_fichas[i] == -1))
+  				lugar1= true;
+  			else if(pos2 == jugadas[i] && (orden_fichas[i] == -1))
+  				lugar2= true;
+  			guardar[0][jugadas[i]]= orden_fichas[i];
 			}
+			if(aprendio)
+				break;
 		}
 	}
-
-	private void controlarDiagonal1(int pos0, int pos1, int pos2, int posInicial) {
-		double[][] guardar;
-		if((pos0!=-1) && (pos1!=-1) && (pos2!=-1)) {
-			if((pos0!=-1) && (pos1!=-1)) {
-				guardar= inicializarJugada();
-				guardar[0][posInicial]= -1;
-				guardar[0][posInicial+4]= -1;	
-				guardar[0][9+posInicial+8]= 0.5;
-				RN_TaTeTi.entrenar(guardar);
-				imprimir(guardar);
-			} else if ((pos0!=-1) && (pos2!=-1)) {
-				guardar= inicializarJugada();
-				guardar[0][posInicial]= -1;
-				guardar[0][posInicial+8]= -1;	
-				guardar[0][9+posInicial+4]= 0.5;
-				RN_TaTeTi.entrenar(guardar);
-				imprimir(guardar);
-			} else {
-				guardar= inicializarJugada();
-				guardar[0][posInicial+4]= -1;
-				guardar[0][posInicial+8]= -1;	
-				guardar[0][9+posInicial]= 0.5;
-				RN_TaTeTi.entrenar(guardar);
-				imprimir(guardar);
-			}
-		}
-	}
-
-	private void controlarColumna(int pos0, int pos1, int pos2, int posInicialColumna) {
-		double[][] guardar;
-		if((pos0!=-1) && (pos1!=-1) && (pos2!=-1)) {
-			if((pos0!=-1) && (pos1!=-1)) {
-				guardar= inicializarJugada();
-				guardar[0][posInicialColumna]= -1;
-				guardar[0][posInicialColumna+3]= -1;	
-				guardar[0][9+posInicialColumna+6]= 0.5;
-				RN_TaTeTi.entrenar(guardar);
-				imprimir(guardar);
-			} else if ((pos0!=-1) && (pos2!=-1)) {
-				guardar= inicializarJugada();
-				guardar[0][posInicialColumna]= -1;
-				guardar[0][posInicialColumna+6]= -1;	
-				guardar[0][9+posInicialColumna+3]= 0.5;
-				RN_TaTeTi.entrenar(guardar);
-				imprimir(guardar);
-			} else {
-				guardar= inicializarJugada();
-				guardar[0][posInicialColumna+3]= -1;
-				guardar[0][posInicialColumna+6]= -1;	
-				guardar[0][9+posInicialColumna]= 0.5;
-				RN_TaTeTi.entrenar(guardar);
-				imprimir(guardar);
-			}
-		}
-	}
-
-	private void controlarFila(int pos0, int pos1, int pos2, int posInicialFila) {
-		double[][] guardar;
-		if((pos0!=-1) && (pos1!=-1) && (pos2!=-1)) {
-			if((pos0!=-1) && (pos1!=-1)) {
-				guardar= inicializarJugada();
-				guardar[0][posInicialFila]= -1;
-				guardar[0][posInicialFila+1]= -1;	
-				guardar[0][9+posInicialFila+2]= 0.5;
-				RN_TaTeTi.entrenar(guardar);
-				imprimir(guardar);
-			} else if ((pos0!=-1) && (pos2!=-1)) {
-				guardar= inicializarJugada();
-				guardar[0][posInicialFila]= -1;
-				guardar[0][posInicialFila+2]= -1;	
-				guardar[0][9+posInicialFila+1]= 0.5;
-				RN_TaTeTi.entrenar(guardar);
-				imprimir(guardar);
-			} else {
-				guardar= inicializarJugada();
-				guardar[0][posInicialFila+1]= -1;
-				guardar[0][posInicialFila+2]= -1;	
-				guardar[0][9+posInicialFila]= 0.5;
-				RN_TaTeTi.entrenar(guardar);
-				imprimir(guardar);
-			}
-		}
-	}
-
+	
 	private void imprimir(double[][] guardar) {
 		for (int j = 0; j < 18; j++) {
 			System.out.print(guardar[0][j] + " ");
