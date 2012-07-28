@@ -1,5 +1,7 @@
 package modelo.jugadores.estrategias;
 
+import java.util.ArrayList;
+
 import modelo.Ficha;
 import modelo.Tablero;
 
@@ -47,7 +49,7 @@ public class EstrategiaProcedural extends EstrategiaComputadora {
 		else if (turno == 2){
 			int movimientoRival = obtenerMovimientoRival(tablero);
 			if (movimientoRival == posiciones[1][1])
-				respuesta = posiciones[0][0];
+				respuesta = obtenerEsquinaVacia(tablero);
 			else
 				//No se analizo la posibilidad de que el rival haga la primer jugada en un borde
 				respuesta = posiciones[1][1];
@@ -105,10 +107,10 @@ public class EstrategiaProcedural extends EstrategiaComputadora {
 		int j = posicion % 3;
 		int ires = 0;
 		int jres = 0;
-		if (i == 0){
+		if (i == 0 || (i == 1 && Math.random() < 0.5)){
 			ires = 2;
 		}
-		if (j == 0){
+		if (j == 0|| (j == 1 && Math.random() < 0.5)){
 			jres = 2;
 		}
 		return posiciones[ires][jres];
@@ -118,21 +120,16 @@ public class EstrategiaProcedural extends EstrategiaComputadora {
 	private boolean hayJaque(Tablero tablero){
 		partidaGanada = false;
 		boolean hayJaque = false;
+		
 		for(int i = 0; i < 3; i++){
 			if (hayJaqueEnLinea(tablero, posiciones[i][0], posiciones[i][1], posiciones[i][2])){
-				if (partidaGanada)
-					return true;
 				hayJaque = true;
 			}
 			if (hayJaqueEnLinea(tablero, posiciones[0][i], posiciones[1][i], posiciones[2][i])){
-				if (partidaGanada)
-					return true;
 				hayJaque = true;
 			}
 		}
 		if (hayJaqueEnLinea(tablero, posiciones[0][0], posiciones[1][1], posiciones[2][2])){
-			if (partidaGanada)
-				return true;
 			hayJaque = true;
 		}
 		if (hayJaqueEnLinea(tablero, posiciones[0][2], posiciones[1][1], posiciones[2][0]))
@@ -147,9 +144,18 @@ public class EstrategiaProcedural extends EstrategiaComputadora {
 			Ficha f2 = tablero.getCasillero(linea[(i + 1) % 3]);	
 			Ficha f3 = tablero.getCasillero(linea[(i + 2) % 3]);
 			if (f1 == Ficha.VACIO && f2 == f3 && f2 != Ficha.VACIO){
-				movimientoARealizar = linea[i];
-				if (f2 == ficha)
+				if (f2 == ficha && partidaGanada){
+					//Encuentro una segunda posibilidad de ganar. Reemplaza la anterior con probabilidad 0.5
+					if (Math.random() < 0.5){
+						movimientoARealizar = linea[i];
+					}
+				}
+				else if (f2 == ficha){
+					movimientoARealizar = linea[i];
 					partidaGanada = true;
+				}
+				else if (!partidaGanada)
+					movimientoARealizar = linea[i];
 				return true;
 			}
 		}
@@ -157,28 +163,33 @@ public class EstrategiaProcedural extends EstrategiaComputadora {
 	}
 	
 	/*
-	 *   |X|O          |X|O 
-	 *   |O|    --->   |O|O 
-	 *  X| |          X| | 
+	 *   |X|O          |X|O       |X|O 
+	 *   |O|    --->   |O|O  o    |O|
+	 *  X| |          X| |       X| |O 
 	 */
 	private int asegurarVictoriaEnTurno7(Tablero tablero){
 		int i = respuestaAnterior / 3;
 		int j = respuestaAnterior % 3;
-		int respuesta;
-		if (tablero.getCasillero(posiciones[i][1]) == Ficha.VACIO)
-			respuesta = posiciones[i][1];
-		else
-			respuesta = posiciones[1][j];
-		return respuesta;
+		ArrayList<Integer> posiblesRespuestas = new ArrayList<Integer>();
+		if (tablero.getCasillero(posiciones[i][1]) == Ficha.VACIO){
+			posiblesRespuestas.add(posiciones[i][1]);
+			posiblesRespuestas.add(posiciones[i][2 -j]);
+		}
+		else{
+			posiblesRespuestas.add(posiciones[1][j]);
+			posiblesRespuestas.add(posiciones[2-i][j]);
+		}
+		return posiblesRespuestas.get((int) (Math.random() * 2));
 	}
 	
 	private int obtenerBlanco(Tablero tablero){
+		ArrayList<Integer> blancos = new ArrayList<Integer>();
 		for (int i = 0; i < 9; i++){
 			if (tablero.getCasillero(i) == Ficha.VACIO){
-				return i;
+				blancos.add(i);
 			}
 		}
-		return 9;
+		return blancos.get((int) (Math.random() * blancos.size()));
 	}
 	
 	private boolean diagonalCompleta(Tablero tablero){
@@ -190,10 +201,16 @@ public class EstrategiaProcedural extends EstrategiaComputadora {
 	}
 	
 	private int obtenerEsquinaVacia(Tablero tablero){
-		if (tablero.getCasillero(posiciones[0][0]) != Ficha.VACIO)
-			return posiciones[0][2];
-		return posiciones[0][0];
+		ArrayList<Integer> esquinasVacias = new ArrayList<Integer>();
+		for (int i = 0; i<=2; i += 2)
+			for (int j = 0; j <= 2; j += 2){
+				int esquina = posiciones[i][j]; 
+				if (tablero.getCasillero(esquina) == Ficha.VACIO)
+					esquinasVacias.add(esquina);
+			}
+		return esquinasVacias.get((int) (Math.random() * esquinasVacias.size()));
 	}
+	
 	
 	private void guardarTableroAnterior(Tablero tablero, int respuesta){
 		for (int i = 0; i < 9; i++){
