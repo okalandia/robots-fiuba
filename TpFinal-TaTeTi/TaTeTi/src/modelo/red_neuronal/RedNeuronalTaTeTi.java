@@ -55,32 +55,33 @@ public class RedNeuronalTaTeTi implements Serializable, NeuralNetListener {
     hidden3.setLayerName("hidden3");
     output.setLayerName("output");
     //Dimensiones layers
-    input.setRows(9);
-    hidden1.setRows(27);
+    input.setRows(18);
+    hidden1.setRows(18);
     hidden2.setRows(27);
     hidden3.setRows(27);    
     output.setRows(9);
     //Synapses
-    FullSynapse synapse_IH= new FullSynapse(); 	/* input   -> hidden11 */
+    FullSynapse synapse_IH= new FullSynapse(); 	/* input   -> hidden11 */    
     FullSynapse synapse_HO= new FullSynapse(); 	/* hidden3 -> output  */
-    FullSynapse synapse_Int1= new FullSynapse(); /* hidden1 -> hidden2 */
-    FullSynapse synapse_Int2= new FullSynapse(); /* hidden2 -> hidden3 */
+    //FullSynapse synapse_Int1= new FullSynapse(); /* hidden1 -> hidden2 */
+    //FullSynapse synapse_Int2= new FullSynapse(); /* hidden2 -> hidden3 */
     synapse_IH.setName("IH");
     synapse_HO.setName("HO");
-    synapse_Int1.setName("Int1");
-    synapse_Int2.setName("Int2"); 
+    //synapse_Int1.setName("Int1");
+    //synapse_Int2.setName("Int2"); 
     //Conexion entre input layer con el hidden layer 1
     input.addOutputSynapse(synapse_IH);
     hidden1.addInputSynapse(synapse_IH);
     //Conexion entre el hidden layer 3 con el output layer
-    hidden3.addOutputSynapse(synapse_HO);
+    //hidden3.addOutputSynapse(synapse_HO);
+    hidden1.addOutputSynapse(synapse_HO);
     output.addInputSynapse(synapse_HO);
     //Conexion entre el hidden layer 1 con el hidden layer 2
-    hidden1.addOutputSynapse(synapse_Int1);
-    hidden2.addInputSynapse(synapse_Int1);
+    //hidden1.addOutputSynapse(synapse_Int1);
+    //hidden2.addInputSynapse(synapse_Int1);
     //Conexion entre el hidden layer 2 con el hidden layer 3
-    hidden2.addOutputSynapse(synapse_Int2);
-    hidden3.addInputSynapse(synapse_Int2); 
+    //hidden2.addOutputSynapse(synapse_Int2);
+    //hidden3.addInputSynapse(synapse_Int2); 
     //Entrenador
     trainer= new TeachingSynapse();
     output.addOutputSynapse(trainer);
@@ -89,8 +90,8 @@ public class RedNeuronalTaTeTi implements Serializable, NeuralNetListener {
     nnet= new NeuralNet();
     nnet.addLayer(input, NeuralNet.INPUT_LAYER);
     nnet.addLayer(hidden1, NeuralNet.HIDDEN_LAYER);
-    nnet.addLayer(hidden2, NeuralNet.HIDDEN_LAYER);
-    nnet.addLayer(hidden3, NeuralNet.HIDDEN_LAYER);
+    //nnet.addLayer(hidden2, NeuralNet.HIDDEN_LAYER);
+    //nnet.addLayer(hidden3, NeuralNet.HIDDEN_LAYER);
     nnet.addLayer(output, NeuralNet.OUTPUT_LAYER);
     nnet.setTeacher(trainer); 
     nnet.addNeuralNetListener(this);
@@ -101,12 +102,12 @@ public class RedNeuronalTaTeTi implements Serializable, NeuralNetListener {
     //Archivo Entrada
 		FileInputSynapse inputStream= new FileInputSynapse();
     inputStream.setInputFile(inputFile);
-		inputStream.setAdvancedColumnSelector("1-9");
+		inputStream.setAdvancedColumnSelector("1-18");
 		input.addInputSynapse(inputStream);
     //Salida Deseada
     FileInputSynapse outputDesired= new FileInputSynapse();
     outputDesired.setInputFile(inputFile);
-    outputDesired.setAdvancedColumnSelector("10-18");
+    outputDesired.setAdvancedColumnSelector("19-27");
     trainer.setDesired(outputDesired);
 		//Monitor
     Monitor monitor= nnet.getMonitor();
@@ -128,13 +129,13 @@ public class RedNeuronalTaTeTi implements Serializable, NeuralNetListener {
 		//Entrada
 		MemoryInputSynapse inputSynapse= new MemoryInputSynapse();
 		inputSynapse.setInputArray(inputArray);
-		inputSynapse.setAdvancedColumnSelector("1-9");
+		inputSynapse.setAdvancedColumnSelector("1-18");
 		input.removeAllInputs();
 		input.addInputSynapse(inputSynapse);
 	   //Salida Deseada
 		MemoryInputSynapse outputDesired= new MemoryInputSynapse();
 		outputDesired.setInputArray(inputArray);
-    outputDesired.setAdvancedColumnSelector("10-18");
+    outputDesired.setAdvancedColumnSelector("19-27");
     trainer.setDesired(outputDesired);
 		//Monitor
     Monitor monitor= nnet.getMonitor();
@@ -203,14 +204,14 @@ public class RedNeuronalTaTeTi implements Serializable, NeuralNetListener {
 	public BigDecimal[] preguntar(double[][] inputArray) {
 		
 		System.out.println("Vector pregunta");
-		for (int i = 0; i < 9; i++) {
+		for (int i = 0; i < 18; i++) {
 			System.out.print(inputArray[0][i] + " ");
 		}
 		System.out.println();
 		
 		MemoryInputSynapse inputSynapse= new MemoryInputSynapse();
 		inputSynapse.setInputArray(inputArray);
-		inputSynapse.setAdvancedColumnSelector("1-9");
+		inputSynapse.setAdvancedColumnSelector("1-18");
 		input.removeAllInputs();
 		input.addInputSynapse(inputSynapse);
 		//Archivo salida con resultados
