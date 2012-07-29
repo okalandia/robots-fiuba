@@ -197,30 +197,51 @@ Por lo general, el Ta-Te-Ti se juega en una cuadrícula de tres por tres (ver Fi
  \label{empate-tateti}
 \end{figure}
 
+\section{Estructura general de la soluci\'on propuesta}
+Se realiz\'o un programa en lenguaje Java y se utiliz\'o el framework de red neuronal Joone. A continuaci\'on se presenta el diagrama de clases.
+
 
 \section{Soluciones propuestas}
+Se armaron distintas estructuras de redes neuronales, con el objetivo de poder entrenarlas para que jueguen al Ta-Te-Ti. El primer intento fue la realizaci\'on de una red con nueve inputs y nueve outputs, al cual se le variaron la cantidad de capas ocultas. Los inputs representan los nueve casilleros del tablero y se especifican con:
+\begin{itemize}
+ \item 1: ficha de la red neuronal.
+ \item -1: ficha rival.
+ \item 0: casillero vac\'io.
+\end{itemize}
+Los outputs representan los nueve casillero del tablero, pero esta vez se le asocia un puntaje que nos indica que tan apropiado es jugar en dicho casillero. \\
+Luego de varios intentos de aprendizaje, qued\'o descartada porque no mostraba cambios significativos al variar los inputs. 
 
-
-\section{Soluci\'on elegida}
-
+\section{Soluci\'on utilizada}
 \subsection{Estructura de la Red Neuronal}
-Para el armado de la red neural, se tuvo en cuenta que la cantidad de casilleros del tablero de Ta-Te-Ti es 9 y que por cada uno se tiene la posibilidad de encontrar tres tipos de elementos (cruz, c\'irculo y vac\'io). Entonces, como primera capa oculta se decidi\'o utilizar 27 (9x3) filas. Para las siguientes capas ocultas se decidieron utilizar 9 y 3 filas, en funci\'on de la cantidad de casilleros y elementos posibles.
+Se arm\'o una red con dieciocho valores de input, organizados de la siguiente manera:
+\begin{itemize}
+ \item del 1 al 9 valen 1 si la posición está ocupada con una ficha de la red, 0 en caso contrario.
+ \item del 10 al 18, valen 1 si hay una ficha del rival, 0 en caso contrario.
+\end{itemize}
+Los outputs son nueve y representan los puntajes para los casilleros del tablero. Se utilizaron tres capas ocultas de 18-27-27 filas. Se utilizaron estos n\'umero teniendo en cuenta la cantidad de casilleros del tablero de Ta-Te-Ti es 9 y que por cada uno se tiene la posibilidad de encontrar tres tipos de elementos (cruz, c\'ırculo y vac\'io).
 
 \subsection{Entrenando la Red Neuronal}
+El entrenamiento de la red neuronal se realiz\'o mediante el juego contra otros algoritmos que juegan Ta-Te-Ti. Con el avance de las partidas, se le fue corrigiendo a la red neuronal donde deb\'ia jugar; para ellos se utiliz\'o un sistema de puntajes de acuerdo a si gan\'o o perdi\'o. De esta forma se le fue marcando un camino y con el pasar de las partidas, la red iba adquiriendo una mayor inteligencia a la hora de realizar sus jugadas.
 
 \subsection{Resultados}
 
+\pagebreak
 \section{Conclusiones}
+Una primera conclusi\'on nos indica que el armado de una red neuronal lleva un tiempo considerablemente mayor al del entrenamiento de la misma. Esto se debe a que el entrenamiento es un proceso automatizado, que no requiere m\'as que la conﬁguraci\'on de algunos par\'ametros. Mientras que para el armado de una red neuronal, que nos permita resolver el problema, es necesario un conocimiento sobre la situaci\'on que
+estamos enfrentando, de manera de poder crear una red que nos permita resolver el problema de manera eﬁciente. Por otro lado, observamos que el entrenamiento prolongado de una red mal armada no signiﬁcaba llegar a los resultados deseados. Es decir, que lo m\'as importante es concentrarnos en crear una red acorde al problema; de manera de asegurarnos llegar a los resultados buscados; lo cual puede estar acompa\~nado de un tiempo de entrenamiento m\'as corto de lo esperado.
+
+
+ESCRIBIR ALGO SOBRE RESULTADOS OBTENIDOSSSSSSS
 
 
 % -------------------------------- Apendice --------------------------------
-\appendix
-\section{Apendice}
-
+%\appendix
+%\section{Apendice}
 
 % ------------------------------- ~Apendice -------------------------------
 
 % ----------------------------- Bibliografia ------------------------------
+\pagebreak
 \begin{thebibliography}{99}
 	\bibitem{docjoone}
 		\textbf{Documentaci\'on Joone} \\
