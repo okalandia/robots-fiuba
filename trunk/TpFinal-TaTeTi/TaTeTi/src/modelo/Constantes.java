@@ -9,7 +9,7 @@ public class Constantes {
   public static final double MOMENTUM= 0.6;
   public static final int	CICLES_TRAINIG= 10000;
   public static final int	CICLES_NOT_TRAINING= 1;
-  public static final int	CICLES_TRAINING_PLAYING= 100;
+  public static final int	CICLES_TRAINING_PLAYING= 1;
   public static final int TRAINING_PATTERNS= 1;
 	public static final String ARCH_ENTRENAMIENTO_RN_TATETI= "data/Entrenamiento-TaTeTi.txt";
 	public static final String ARCH_RN_TATETI= "data/RN-TaTeTi.snet";

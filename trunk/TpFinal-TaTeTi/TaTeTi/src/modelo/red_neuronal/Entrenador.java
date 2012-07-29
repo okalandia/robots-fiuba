@@ -48,19 +48,38 @@ public class Entrenador {
 	}
 	
 	public void entrenarRedNeuronalConMemoria(int turnoInicialRN, boolean gano) {
-		entrenar2(turnoInicialRN, gano);
+		entrenar(turnoInicialRN, gano);
 	}
 
 	private void entrenar(int turnoInicialRN, boolean gano) {
 		double[][] guardar= inicializarJugada();
-		int posicion, valor, turno= 0;
-		for(int i= 0; i < 9; i++) {
-			if(jugadas[i] != -1) {
-				turno= i;
+		int posicion, valor = 0;
+		for(int turno= 0; turno < 9; turno++) {
+			if(jugadas[turno] != -1) {				
 				posicion= jugadas[turno];
-				valor= obtenerValor(turnoInicialRN, turno);
+				if (gano)
+					guardar[0][18 + posicion] = 1.0;
+				else{
+					//Si perdi distribuyo la probabilidad entre las demas casillas libres
+					double puntaje = 1.0 / (9 - (turno + 1));
+					for (int i = 0; i < 9; i++)
+						if (guardar[0][i] == 0 && guardar[0][9+i] == 0 && i != posicion)
+							guardar[0][18+i] = puntaje;
+				}
+				boolean miTurno = (turnoInicialRN == 0) && ((turno % 2) == 0) || (turnoInicialRN == 1) && ((turno % 2) == 1);
+				int movimientoRival = 0;
+				if (miTurno){
+					imprimir(guardar);
+					RN_TaTeTi.entrenar(guardar);					
+				}
+				else
+					movimientoRival = 9;
+				guardar[0][movimientoRival + posicion] = 1.0;
+				for (int i = 18; i < 27; i++)
+					guardar[0][i] = 0;
+				/*valor= obtenerValor(turnoInicialRN, turno);
 				if(valor == 1) {
-					guardar[0][9+posicion]= generarPuntaje(gano);
+					guardar[0][18 + posicion]= generarPuntaje(gano);
 					RN_TaTeTi.entrenar(guardar);
 					imprimir(guardar);
 					System.out.println("GUARDO");
@@ -69,7 +88,7 @@ public class Entrenador {
 				} else {
 					guardar[0][posicion]= valor;
 				 imprimir(guardar);
-				}
+				}*/
 			}		
 		}
 	}
@@ -159,9 +178,9 @@ public class Entrenador {
 	}
 	
 	private void imprimir(double[][] guardar) {
-		for (int j = 0; j < 18; j++) {
+		for (int j = 0; j < 27; j++) {
 			System.out.print(guardar[0][j] + " ");
-			if(j==8)
+			if(j==8 || j == 17)
 				System.out.print(" | ");
 	}
 		System.out.println();
@@ -169,8 +188,8 @@ public class Entrenador {
 
 	private double generarPuntaje(boolean gano) {
 		if(gano)
-			return 0.5;
-		return 0.01;
+			return 1.0;
+		return 0.0;
 	}
 
 	private int obtenerValor(int turnoInicialRN, int turnoActual) {
@@ -183,7 +202,7 @@ public class Entrenador {
 			valorImpar= 1;			
 		}
 		int valor;
-		if(turnoActual%2 == 0)
+		if(turnoActual % 2 == 0)
 			valor= valorPar;
 		else
 			valor= valorImpar;
@@ -191,8 +210,8 @@ public class Entrenador {
 	}
 
 	private double[][] inicializarJugada() {
-		double[][] guardar= new double[1][18];
-		for(int i = 0; i < 18; i++)
+		double[][] guardar= new double[1][27];
+		for(int i = 0; i < 27; i++)
 			guardar[0][i]= 0;
 		return guardar;
 	}

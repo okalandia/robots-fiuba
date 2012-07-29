@@ -28,14 +28,21 @@ public class EstrategiaRedNeuronal extends EstrategiaComputadora {
 	
 	@Override
 	public int generarJugada(Tablero tablero) {
-		double[][] tabl= new double[1][9];
+		double[][] tabl= new double[1][18];
 		for (int i = 0; i < 9; i++) {
-			double valor= 0.0;
-			if(tablero.getCasillero(i) != Ficha.VACIO) {
-				if((tablero.getCasillero(i).compareTo(ficha)) == 0) valor= 1.0;
-				else valor= -1.0;
-			}
-			tabl[0][i]= valor;
+			//double valor= 0.0;
+			//if(tablero.getCasillero(i) != Ficha.VACIO) {
+			//	if((tablero.getCasillero(i).compareTo(ficha)) == 0) valor= 1.0;
+			//	else valor= -1.0;
+			//}
+			//tabl[0][i]= valor;
+			tabl[0][i] = 0;
+			tabl[0][i + 9] = 0;
+			if ((tablero.getCasillero(i).compareTo(ficha)) == 0)
+				tabl[0][i] = 1;
+			else if ((tablero.getCasillero(i).compareTo(Ficha.VACIO)) != 0)
+				tabl[0][i + 9] = 1;
+					
 		}	
 		if(!esTableroAnterior(tabl)) {
 			BigDecimal[] resultados= rn.preguntar(tabl);	
