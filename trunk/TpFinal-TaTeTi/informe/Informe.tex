@@ -201,6 +201,12 @@ Un jugador que conozca unas pocas estrategias b\'asicas puede asegurarse al meno
 \section{Estructura general de la soluci\'on propuesta}
 Se realiz\'o un programa en lenguaje Java y se utiliz\'o el framework de red neuronal Joone. A continuaci\'on se presenta el diagrama de clases.
 
+\begin{figure}[h!]
+ \centering
+ \includegraphics{./imgs/diagrama-de-clase.png}
+ % diagrama-de-clase.png: 442x417 pixel, 96dpi, 11.69x11.03 cm, bb=0 0 331 313
+ \caption{Diagrama de clases de la soluci\'on propuesta}
+\end{figure}
 
 \section{Soluciones propuestas}
 Se armaron distintas estructuras de redes neuronales, con el objetivo de poder entrenarlas para que jueguen al Ta-Te-Ti. El primer intento fue la realizaci\'on de una red con nueve inputs y nueve outputs, al cual se le variaron la cantidad de capas ocultas. Los inputs representan los nueve casilleros del tablero y se especifican con:
@@ -219,12 +225,12 @@ Se arm\'o una red con dieciocho valores de input, organizados de la siguiente ma
  \item del 1 al 9 valen 1 si la posición está ocupada con una ficha de la red, 0 en caso contrario.
  \item del 10 al 18, valen 1 si hay una ficha del rival, 0 en caso contrario.
 \end{itemize}
-Los outputs son nueve y representan los puntajes para los casilleros del tablero. Se utilizaron tres capas ocultas de 18-27-27 filas. Se utilizaron estos n\'umero teniendo en cuenta la cantidad de casilleros del tablero de Ta-Te-Ti es 9 y que por cada uno se tiene la posibilidad de encontrar tres tipos de elementos (cruz, c\'irculo y vac\'io).
+Los outputs son nueve y representan los puntajes para los casilleros del tablero. Se utiliz\'o una capa oculta de dieciocho filas. 
 
 \subsection{Entrenando la Red Neuronal}
 El entrenamiento de la red neuronal se realiz\'o mediante el juego contra otros algoritmos que juegan Ta-Te-Ti. Con el avance de las partidas, se le fue ense\~nando a la red neuronal los movimientos a realizar. Para ellos se utiliz\'o un sistema de puntajes donde luego de cada partida se busca que la red imite los movimientos del ganador y evite los del perdedor. De esta forma se le fue marcando un camino y con el pasar de las partidas, la red iba adquiriendo una mayor inteligencia a la hora de realizar sus jugadas. \\ 
 
-Para analizar diferentes alternativas de entrenamiento, se construy\'o un algoritmo que sigue una estrategia met\'odica que resulta repetitiva pero efectiva y otro que simplemente coloca marcas en lugares al azar.
+Para analizar diferentes alternativas de entrenamiento, se construy\'o un algoritmo que sigue una estrategia met\'odica que resulta repetitiva pero efectiva y otro que simplemente coloca marcas en luga%res al azar.
 
 \subsection{Resultados}
 
@@ -262,7 +268,7 @@ El algoritmo aleatorio s\'i resulta de utilidad para reforzar una red ya entrena
 		\url{http://users.auth.gr/kehagiat/GameTheory/12CombBiblio/TicTacToe.pdf}
 
 	\bibitem{tic-tac-toe2}
-		\textbf{How to code an artificial neural network (Tic-tac-toe)?} \\
+		\textbf{An artificial neural network (Tic-tac-toe)} \\
 		\url{http://stackoverflow.com/questions/761216/} \\
 		\url{how-to-code-an-artificial-neural-network-tic-tac-toe}
 
@@ -273,6 +279,39 @@ El algoritmo aleatorio s\'i resulta de utilidad para reforzar una red ya entrena
 	\bibitem{tic-tac-toe4}
 		\textbf{TD Learning of Game Evaluation Functions with Hierarchical Neural Architectures} \\
 		\url{http://webber.physik.uni-freiburg.de/~hon/vorlss02/Literatur/reinforcement/GameEvaluationWithNeuronal.pdf}
+
+	\bibitem{tic-tac-toe5}
+		\textbf{A Neural Network that plays TicTacToe} \\
+		\url{www.tropicalcoder.com/NeuralNetwork.htm}    
+
+	\bibitem{tic-tac-toe6}
+		\textbf{Tic Tac Toe Neural Network as Evaluation Function} \\
+		\url{http://stackoverflow.com/questions/10680049/tic-tac-toe-neural-network-as-evaluation-function}
+	
+	\bibitem{tic-tac-toe7}
+		\textbf{Tic Tac Toe Neural Networks} \\
+		\url{http://es.appbrain.com/app/tic-tac-toe-neural-networks/com.samuel.tictactoe}
+
+	\bibitem{tic-tac-toe8}
+		\textbf{Playing tic-tac-toe using a modified neural network and an improved genetic algorithm} \\
+		\url{http://repository.lib.polyu.edu.hk/jspui/handle/10397/1364}
+
+	\bibitem{tic-tac-toe9}
+		\textbf{Probabilistic Neural Network Playing a Simple Game} \\
+		\url{www.dsi.unifi.it/ANNPR/CR/23.pdf}
+
+	\bibitem{tic-tac-toe10}
+		\textbf{Using Evolutionary Programming to Create Neural Networks that are Capable of Playing Tic-Tac-Toe} \\
+		\url{http://65.44.200.132/Library/1993/EP_NN_tic_tac_toe.pdf}
+
+	\bibitem{tic-tac-toe11}
+		\textbf{Tic Tac Toe Time} \\
+		\url{challenge.nm.org/FinalReports/93.pdf}
+
+	\bibitem{tic-tac-toe12}
+		\textbf{Evolution, Neural Networks, Games, and Intelligence} \\
+		\url{http://red.cs.nott.ac.uk/~gxk/courses/g5baim/papers/evolve-nn-001/ChellapillaAndFogelProcIEEEText.PDF}
+
 
 \end{thebibliography}
 
