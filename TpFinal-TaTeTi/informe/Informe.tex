@@ -107,7 +107,7 @@
 % Tabla de integrantes.
 
 \Large{\underline{\textsc{Trabajo Pr\'actico Final}}} \\
-\Large{\underline{\textsc{El juego Ta-Te-Ti}}}
+\Large{\underline{\textsc{Utilizaci\'on de Redes Neuronales en Juegos de Ingenio}}}
 \vfill
  
 \Large\underline{Integrantes} \linebreak\linebreak
@@ -168,10 +168,11 @@ Rivero, Hern\'an & 88455 & riverohernanj@gmail.com \\
 % ----------------------------- Inicio del tp -----------------------------
 
 \section{Objetivo}
-El objetivo del presente trabajo pr\'actico es entrenar una red neuronal para que juegue al Ta-Te-Ti. Se utilizar\'a una red neuronal de tipo backpropagation, para generar un m\'etodo de aprendizaje a medida que se desarrollan las partidas de Ta-Te-Ti.
+El objetivo del presente trabajo pr\'actico es descubrir y analizar diferentes posibilidades para entrenar una red neuronal de forma tal que sea capaz de jugar de manera eficaz a un juego de ingenio. Se utilizar\'a una red neuronal de tipo backpropagation, para generar un m\'etodo de aprendizaje a medida que se desarrollan las partidas. El juego elegido para los ensayos es el Ta-Te-Ti.
 
 \section{El juego Ta-Te-Ti}
 Por lo general, el Ta-Te-Ti se juega en una cuadrícula de tres por tres (ver Figura [\ref{grilla-vacia}]). Cada jugador, a su vez se mueve mediante la colocación de un marcador en un casillero vac\'io. El marcador de un jugador es ``X``(cruz) y el del otro es ``O``(c\'irculo). El juego termina tan pronto como un jugador tiene tres marcadores en una fila: horizontalmente, verticalmente, o en diagonal (un ejemplo se muestra en la Figura [\ref{cruz-gana}]). El juego puede también terminan en empate (ver Figura [\ref{empate-tateti}]), si no hay posibilidad de ganar para alguno de los jugadores.
+Un jugador que conozca unas pocas estrategias b\'asicas puede asegurarse al menos un empate.
 
 \begin{figure}[h!]
  \centering
@@ -218,20 +219,25 @@ Se arm\'o una red con dieciocho valores de input, organizados de la siguiente ma
  \item del 1 al 9 valen 1 si la posición está ocupada con una ficha de la red, 0 en caso contrario.
  \item del 10 al 18, valen 1 si hay una ficha del rival, 0 en caso contrario.
 \end{itemize}
-Los outputs son nueve y representan los puntajes para los casilleros del tablero. Se utilizaron tres capas ocultas de 18-27-27 filas. Se utilizaron estos n\'umero teniendo en cuenta la cantidad de casilleros del tablero de Ta-Te-Ti es 9 y que por cada uno se tiene la posibilidad de encontrar tres tipos de elementos (cruz, c\'ırculo y vac\'io).
+Los outputs son nueve y representan los puntajes para los casilleros del tablero. Se utilizaron tres capas ocultas de 18-27-27 filas. Se utilizaron estos n\'umero teniendo en cuenta la cantidad de casilleros del tablero de Ta-Te-Ti es 9 y que por cada uno se tiene la posibilidad de encontrar tres tipos de elementos (cruz, c\'irculo y vac\'io).
 
 \subsection{Entrenando la Red Neuronal}
-El entrenamiento de la red neuronal se realiz\'o mediante el juego contra otros algoritmos que juegan Ta-Te-Ti. Con el avance de las partidas, se le fue corrigiendo a la red neuronal donde deb\'ia jugar; para ellos se utiliz\'o un sistema de puntajes de acuerdo a si gan\'o o perdi\'o. De esta forma se le fue marcando un camino y con el pasar de las partidas, la red iba adquiriendo una mayor inteligencia a la hora de realizar sus jugadas.
+El entrenamiento de la red neuronal se realiz\'o mediante el juego contra otros algoritmos que juegan Ta-Te-Ti. Con el avance de las partidas, se le fue ense\~nando a la red neuronal los movimientos a realizar. Para ellos se utiliz\'o un sistema de puntajes donde luego de cada partida se busca que la red imite los movimientos del ganador y evite los del perdedor. De esta forma se le fue marcando un camino y con el pasar de las partidas, la red iba adquiriendo una mayor inteligencia a la hora de realizar sus jugadas. \\ 
+
+Para analizar diferentes alternativas de entrenamiento, se construy\'o un algoritmo que sigue una estrategia met\'odica que resulta repetitiva pero efectiva y otro que simplemente coloca marcas en lugares al azar.
 
 \subsection{Resultados}
 
 \pagebreak
 \section{Conclusiones}
 Una primera conclusi\'on nos indica que el armado de una red neuronal lleva un tiempo considerablemente mayor al del entrenamiento de la misma. Esto se debe a que el entrenamiento es un proceso automatizado, que no requiere m\'as que la conﬁguraci\'on de algunos par\'ametros. Mientras que para el armado de una red neuronal, que nos permita resolver el problema, es necesario un conocimiento sobre la situaci\'on que
-estamos enfrentando, de manera de poder crear una red que nos permita resolver el problema de manera eﬁciente. Por otro lado, observamos que el entrenamiento prolongado de una red mal armada no signiﬁcaba llegar a los resultados deseados. Es decir, que lo m\'as importante es concentrarnos en crear una red acorde al problema; de manera de asegurarnos llegar a los resultados buscados; lo cual puede estar acompa\~nado de un tiempo de entrenamiento m\'as corto de lo esperado.
+estamos enfrentando, de manera de poder crear una red que nos permita resolver el problema de manera eﬁciente. Por otro lado, observamos que el entrenamiento prolongado de una red mal armada no signiﬁcaba llegar a los resultados deseados. Es decir, que lo m\'as importante es concentrarnos en crear una red acorde al problema; de manera de asegurarnos llegar a los resultados buscados; lo cual puede estar acompa\~nado de un tiempo de entrenamiento m\'as corto de lo esperado. \\
 
+En cuanto a lo que se observa del entrenamiento de la red, la conclusi\'on m\'as importante que se obtiene es que no es posible alcanzar un desarrollo \'optimo si se utiliza un \'unico algoritmo. La red es capaz de aprender a defenderse del algoritmo bueno, pero esto no le va a servir al momento de enfrentarse a otros. La red aprende tambi\'en a ganarle con mucha facilidad al algoritmo aleatorio, pero utilizando estrategias muy b\'asicas que no le sirven ante un rival de mayor inteligencia. \\
 
-ESCRIBIR ALGO SOBRE RESULTADOS OBTENIDOSSSSSSS
+La mejor forma de entrenar a la red es alternando los algoritmos que la enfrentan, de manera tal de que se encuentre con la mayor cantidad de variantes de jugadas posibles. La estrategia de jugar en posiciones aleatorias no resulta conveniente para el entrenamiento inicial. Esto es debido a que la red de esta manera, luego de una cierta cantidad de partidas, comienza a repetir siempre la misma jugada, que no necesariamente es buena pero resulta eficaz ante la nula inteligencia del rival. Prolongar un entrenamiento de estas caracter\'isticas conduce a que la red refuerce cada vez m\'as estas pr\'acticas poco recomendables. \\
+
+El algoritmo aleatorio s\'i resulta de utilidad para reforzar una red ya entrenada, ya que puede ser capaz de descubrirle vulnerabilidades. Cuando se utiliza es recomendable no premiar las victorias, por el fen\'omeno descripto anteriormente. Tan solo se deben penar los movimientos que conducen a derrotas. \\
 
 
 % -------------------------------- Apendice --------------------------------
