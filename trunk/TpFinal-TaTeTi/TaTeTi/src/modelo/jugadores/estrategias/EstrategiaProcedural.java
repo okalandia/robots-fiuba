@@ -63,9 +63,10 @@ public class EstrategiaProcedural extends EstrategiaComputadora {
 				else 
 					respuesta = posiciones[0][1];
 			}
+			else if (lineaCompleta(tablero))
+				respuesta = obtenerEsquinaVacia(tablero);
 			else
-				//Estrategia no analizada
-				respuesta = obtenerBlanco(tablero);
+				respuesta = evitarDerrotaEnTurno7(tablero);
 		}
 		else{
 			//No analizado en profundidad
@@ -94,12 +95,6 @@ public class EstrategiaProcedural extends EstrategiaComputadora {
 			i++;
 		}
 		return i;
-	}
-	
-	private boolean esEsquina(int posicion){
-		int i = posicion / 3;
-		int j = posicion % 3;
-		return (i != 1 && j != 1);		
 	}
 	
 	private int obtenerEsquinaAlejada(int posicion){
@@ -182,6 +177,28 @@ public class EstrategiaProcedural extends EstrategiaComputadora {
 		return posiblesRespuestas.get((int) (Math.random() * 2));
 	}
 	
+	private int evitarDerrotaEnTurno7(Tablero tablero){
+		int[] iRival = new int[2];
+		int[] jRival = new int[2];
+		int pos = 0;
+		for (int i = 0; i <= 2; i++){
+			for (int j = 0; j<= 2; j++){
+				Ficha casillero = tablero.getCasillero(posiciones[i][j]);
+				if (casillero != Ficha.VACIO && casillero != ficha){
+					iRival[pos] = i;
+					jRival[pos] = j;
+					pos++;
+				}
+			}
+		}
+		int respuesta = 0;
+		for (int i = 0; i <= 2; i += 2)
+			for (int j = 0; j <= 2; j += 2)
+				if ((i == iRival[0] || j == jRival[0]) && (i == iRival[1] || j == jRival[1]))
+					respuesta = posiciones[i][j];	
+		return respuesta;
+	}
+	
 	private int obtenerBlanco(Tablero tablero){
 		ArrayList<Integer> blancos = new ArrayList<Integer>();
 		for (int i = 0; i < 9; i++){
@@ -196,6 +213,14 @@ public class EstrategiaProcedural extends EstrategiaComputadora {
 		if (tablero.getCasillero(posiciones[0][0]) != Ficha.VACIO && tablero.getCasillero(posiciones[1][1]) != Ficha.VACIO	&& tablero.getCasillero(posiciones[2][2]) != Ficha.VACIO)
 			return true;
 		if (tablero.getCasillero(posiciones[0][2]) != Ficha.VACIO && tablero.getCasillero(posiciones[1][1]) != Ficha.VACIO	&& tablero.getCasillero(posiciones[2][0]) != Ficha.VACIO)
+			return true;
+		return false;
+	}
+
+	private boolean lineaCompleta(Tablero tablero){
+		if (tablero.getCasillero(posiciones[0][1]) != Ficha.VACIO && tablero.getCasillero(posiciones[1][1]) != Ficha.VACIO	&& tablero.getCasillero(posiciones[2][1]) != Ficha.VACIO)
+			return true;
+		if (tablero.getCasillero(posiciones[1][0]) != Ficha.VACIO && tablero.getCasillero(posiciones[1][1]) != Ficha.VACIO	&& tablero.getCasillero(posiciones[1][2]) != Ficha.VACIO)
 			return true;
 		return false;
 	}
